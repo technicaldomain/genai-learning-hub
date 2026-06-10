@@ -1,10 +1,7 @@
 # Stage 1: Build
-FROM node:22-alpine AS builder
+FROM node:22-bookworm-slim AS builder
 
 WORKDIR /app
-
-# Disable pnpm supply-chain policy checks for fresh lockfile
-ENV PNPM_MINIMUM_RELEASE_AGE=0
 
 # Install pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
@@ -18,7 +15,7 @@ COPY apps/ ./apps/
 COPY libs/ ./libs/
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --no-frozen-lockfile --ignore-scripts
 
 # Build the frontend
 RUN pnpm --filter @genai-learning-hub/frontend build
