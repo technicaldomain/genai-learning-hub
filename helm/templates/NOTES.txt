@@ -1,0 +1,37 @@
+{{- $fullname := include "common.fullname" . -}}
+
+Thank you for installing {{ .Chart.Name }}!
+
+{{ if .Values.ingress.enabled }}
+Your GenAI Learning Hub is available at:
+
+  Frontend: http{{ if $.Values.ingress.tls }}s{{ end }}://{{ (index $.Values.ingress.hosts 0).host }}
+  Backend API: {{ (index $.Values.ingress.hosts 0).host }}/api
+  MCP Connect: {{ (index $.Values.ingress.hosts 0).host }}/mcp
+
+{{- range $host := $.Values.ingress.hosts }}
+  {{- range $path := $host.paths }}
+    {{- if eq $path.service "frontend" }}
+  {{ $path.path }} -> Frontend ({{ $fullname }}-frontend:80)
+    {{- else if eq $path.service "backend" }}
+  {{ $path.path }} -> Backend ({{ $fullname }}-backend:8000)
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- else }}
+To access the application:
+
+  Frontend: {{ $fullname }}-frontend (port 80)
+  Backend:  {{ $fullname }}-backend (port 8000)
+
+Port forward example:
+  kubectl port-forward svc/{{ $fullname }}-frontend 8080:80
+  kubectl port-forward svc/{{ $fullname }}-backend 8000:8000
+{{- end }}
+
+Resources created:
+  Deployment: {{ $fullname }}-frontend
+  Deployment: {{ $fullname }}-backend
+  Service:    {{ $fullname }}-frontend (port 80)
+  Service:    {{ $fullname }}-backend (port 8000)
+  ConfigMap:  {{ $fullname }}-backend-config

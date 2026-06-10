@@ -1,0 +1,10 @@
+{{- template "common.configmap" (list . "application.backend.configmap") -}}
+{{- define "application.backend.configmap" -}}
+metadata:
+  name: {{ include "common.fullname" . }}-backend-config
+data:
+  {{- $data := default (dict) .Values.backend.config.data -}}
+  {{- range $key, $value := $data }}
+  {{ $key | upper }}: {{ $value | quote }}
+  {{- end }}
+{{- end }}

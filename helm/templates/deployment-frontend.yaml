@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "common.fullname" . }}-frontend
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: frontend
+spec:
+  replicas: {{ default 1 .Values.frontend.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "common.labels.selector" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: frontend
+      annotations:
+        {{- include "common.annotations.deployment" . | nindent 8 }}
+    spec:
+      {{- include "common.affinity" . | nindent 6 }}
+      {{- if .Values.tolerations }}
+      tolerations:
+        {{- toYaml .Values.tolerations | nindent 8 }}
+      {{- end }}
+      {{- include "common.security.context" . | nindent 6 }}
+      serviceAccountName: {{ template "common.serviceAccountName" . }}
+      {{- $f := default (dict) .Values.frontend }}
+      {{- $hc := default (dict) ($f.healthCheck | default (dict)) }}
+      {{- $hcl := default (dict) ($hc.liveness | default (dict)) }}
+      {{- $hcr := default (dict) ($hc.readiness | default (dict)) }}
+      {{- $res := default (dict) ($f.resources | default (dict)) }}
+      {{- $rr := default (dict) ($res.requests | default (dict)) }}
+      {{- $rl := default (dict) ($res.limits | default (dict)) }}
+      containers:
+        - name: app
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          image: "{{ default "ghcr.io" .Values.image.registry }}/{{ $f.image.repository }}:{{ default .Chart.AppVersion $f.image.tag }}"
+          imagePullPolicy: {{ default "IfNotPresent" .Values.image.pullPolicy }}
+          livenessProbe:
+            httpGet:
+              path: {{ default "/" $hcl.path }}
+              port: 80
+            initialDelaySeconds: {{ default 15 $hcl.initialDelaySeconds }}
+            timeoutSeconds: {{ default 3 $hcl.timeoutSeconds }}
+            periodSeconds: {{ default 20 $hcl.periodSeconds }}
+            failureThreshold: {{ default 3 $hcl.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ default "/" $hcr.path }}
+              port: 80
+            initialDelaySeconds: {{ default 5 $hcr.initialDelaySeconds }}
+            timeoutSeconds: {{ default 3 $hcr.timeoutSeconds }}
+            periodSeconds: {{ default 10 $hcr.periodSeconds }}
+            failureThreshold: {{ default 3 $hcr.failureThreshold }}
+          resources:
+            requests:
+              memory: {{ default "64Mi" $rr.memory }}
+              cpu: {{ default "50m" $rr.cpu }}
+            limits:
+              memory: {{ default "256Mi" $rl.memory }}
+              cpu: {{ default "200m" $rl.cpu }}

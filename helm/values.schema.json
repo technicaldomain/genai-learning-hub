@@ -1,0 +1,255 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "genai-learning-hub Chart values schema",
+  "description": "Schema for values.yaml of the genai-learning-hub Helm chart",
+  "type": "object",
+  "properties": {
+    "fullnameOverride": { "type": ["string", "null"], "description": "Optional full name override for the chart" },
+
+    "common": { "type": "object", "description": "Values injected by common chart libraries (permissive)", "additionalProperties": true },
+
+    "image": {
+      "type": "object",
+      "description": "Container image registry settings shared by all components",
+      "properties": {
+        "registry": { "type": "string", "default": "ghcr.io" },
+        "pullPolicy": { "type": "string", "enum": ["IfNotPresent", "Always", "Never"], "default": "IfNotPresent" }
+      },
+      "additionalProperties": true
+    },
+
+    "backend": {
+      "type": "object",
+      "description": "Backend (FastAPI) configuration",
+      "properties": {
+        "name": { "type": "string", "default": "backend" },
+        "replicaCount": { "type": "integer", "minimum": 0, "default": 1 },
+        "image": {
+          "type": "object",
+          "properties": {
+            "repository": { "type": "string", "default": "ghcr.io/technicaldomain/genai-learning-hub-backend" },
+            "tag": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "config": {
+          "type": "object",
+          "description": "Configuration values rendered into the server ConfigMap (env-style)",
+          "properties": {
+            "data": {
+              "type": "object",
+              "description": "Key/value pairs for server config and environment variables",
+              "properties": {
+                "APP_NAME": { "type": "string", "default": "GenAI Learning Hub" },
+                "DEBUG": { "type": "string", "default": "false" },
+                "JWT_SECRET": { "type": "string", "default": "change-me-in-production" },
+                "CORS_ORIGINS": { "type": "string", "default": "http://localhost" },
+                "BACKEND_HOST": { "type": "string", "default": "0.0.0.0" },
+                "BACKEND_PORT": { "type": "string", "default": "8000" }
+              },
+              "patternProperties": { "^.*$": { "type": ["string", "boolean", "number", "array", "object", "null"] } },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "secrets": {
+          "type": "object",
+          "description": "External secret configuration",
+          "properties": {
+            "externalSecretName": { "type": "string", "default": "" },
+            "mountAsFiles": {
+              "type": "object",
+              "properties": {
+                "enabled": { "type": "boolean", "default": false },
+                "path": { "type": "string", "default": "/var/run/secrets/genai-learning-hub" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "healthCheck": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean", "default": true },
+            "liveness": { "type": "object", "additionalProperties": true },
+            "readiness": { "type": "object", "additionalProperties": true }
+          },
+          "additionalProperties": false
+        },
+        "serviceAccount": {
+          "type": "object",
+          "properties": {
+            "create": { "type": "boolean", "default": false },
+            "annotations": { "type": "object", "additionalProperties": { "type": "string" } },
+            "name": { "type": ["string", "null"], "default": null }
+          },
+          "additionalProperties": false
+        },
+        "resources": {
+          "type": "object",
+          "description": "Kubernetes resource requests and limits",
+          "properties": {
+            "limits": {
+              "type": "object",
+              "properties": { "cpu": { "type": "string" }, "memory": { "type": "string" } },
+              "additionalProperties": false
+            },
+            "requests": {
+              "type": "object",
+              "properties": { "cpu": { "type": "string" }, "memory": { "type": "string" } },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "hpa": {
+          "type": "object",
+          "description": "Horizontal Pod Autoscaler options",
+          "properties": {
+            "enabled": { "type": "boolean", "default": false },
+            "minReplicas": { "type": "integer", "minimum": 1, "default": 1 },
+            "maxReplicas": { "type": "integer", "minimum": 1, "default": 5 },
+            "targetCPUUtilizationPercentage": { "type": "integer", "minimum": 1, "maximum": 100, "default": 80 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "frontend": {
+      "type": "object",
+      "description": "Frontend (Nginx + React) configuration",
+      "properties": {
+        "name": { "type": "string", "default": "frontend" },
+        "replicaCount": { "type": "integer", "minimum": 0, "default": 1 },
+        "image": {
+          "type": "object",
+          "properties": {
+            "repository": { "type": "string", "default": "ghcr.io/technicaldomain/genai-learning-hub-frontend" },
+            "tag": { "type": "string", "default": "" }
+          },
+          "additionalProperties": false
+        },
+        "healthCheck": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean", "default": true },
+            "liveness": { "type": "object", "additionalProperties": true },
+            "readiness": { "type": "object", "additionalProperties": true }
+          },
+          "additionalProperties": false
+        },
+        "serviceAccount": {
+          "type": "object",
+          "properties": {
+            "create": { "type": "boolean", "default": false },
+            "annotations": { "type": "object", "additionalProperties": { "type": "string" } },
+            "name": { "type": ["string", "null"], "default": null }
+          },
+          "additionalProperties": false
+        },
+        "resources": {
+          "type": "object",
+          "description": "Kubernetes resource requests and limits",
+          "properties": {
+            "limits": {
+              "type": "object",
+              "properties": { "cpu": { "type": "string" }, "memory": { "type": "string" } },
+              "additionalProperties": false
+            },
+            "requests": {
+              "type": "object",
+              "properties": { "cpu": { "type": "string" }, "memory": { "type": "string" } },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "hpa": {
+          "type": "object",
+          "description": "Horizontal Pod Autoscaler options",
+          "properties": {
+            "enabled": { "type": "boolean", "default": false },
+            "minReplicas": { "type": "integer", "minimum": 1, "default": 1 },
+            "maxReplicas": { "type": "integer", "minimum": 1, "default": 5 },
+            "targetCPUUtilizationPercentage": { "type": "integer", "minimum": 1, "maximum": 100, "default": 80 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "ingress": {
+      "type": "object",
+      "description": "Ingress configuration",
+      "properties": {
+        "enabled": { "type": "boolean", "default": true },
+        "className": { "type": "string", "default": "traefik" },
+        "annotations": { "type": "object", "additionalProperties": { "type": "string" } },
+        "hosts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "host": { "type": "string" },
+              "paths": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": { "type": "string" },
+                    "pathType": { "type": "string", "default": "Prefix" },
+                    "service": { "type": "string", "enum": ["frontend", "backend"] }
+                  },
+                  "required": ["path", "service"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["host", "paths"],
+            "additionalProperties": false
+          }
+        },
+        "tls": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "secretName": { "type": "string" },
+              "hosts": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "securityContext": {
+      "type": "object",
+      "properties": {
+        "runAsUser": { "type": "integer", "default": 1001 },
+        "runAsGroup": { "type": "integer", "default": 1001 },
+        "fsGroup": { "type": "integer", "default": 1001 },
+        "runAsNonRoot": { "type": "boolean", "default": true }
+      },
+      "additionalProperties": false
+    },
+
+    "sharedConfigs": { "type": "array", "items": { "type": "string" } },
+    "sharedSecrets": { "type": "array", "items": { "type": "string" } },
+    "tolerations": { "type": "array" },
+    "antiAffinityLabels": { "type": "array", "items": { "type": "string" } },
+
+    "global": {
+      "type": "object",
+      "description": "Helm global values (inherited from parent charts or CLI).",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,136 @@
+# GenAI Learning Hub — Helm values
+
+# ──────────────────────────────────────────────
+# Image configuration (defaults to ghcr.io/technicaldomain)
+# ──────────────────────────────────────────────
+
+image:
+  registry: ghcr.io
+  repository: technicaldomain/genai-learning-hub
+
+# ──────────────────────────────────────────────
+# Backend (FastAPI)
+# ──────────────────────────────────────────────
+
+backend:
+  name: backend
+  replicaCount: 1
+  image:
+    repository: technicaldomain/genai-learning-hub-backend
+    tag: ""  # defaults to appVersion
+  # Backend-specific config (rendered into ConfigMap as env vars)
+  config:
+    data:
+      APP_NAME: "GenAI Learning Hub"
+      DEBUG: "false"
+      JWT_SECRET: "change-me-in-production"
+      CORS_ORIGINS: "http://localhost"
+      BACKEND_HOST: "0.0.0.0"
+      BACKEND_PORT: "8000"
+  secrets:
+    # External secret name containing sensitive values (JWT_SECRET, OIDC secrets, etc.)
+    externalSecretName: ""
+    mountAsFiles:
+      enabled: false
+      path: "/var/run/secrets/genai-learning-hub"
+  healthCheck:
+    enabled: true
+    liveness:
+      path: /api/health
+      initialDelaySeconds: 15
+      periodSeconds: 20
+      timeoutSeconds: 3
+      failureThreshold: 3
+    readiness:
+      path: /api/health
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 3
+      failureThreshold: 3
+  serviceAccount:
+    create: false
+    name: ""
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  hpa:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+
+# ──────────────────────────────────────────────
+# Frontend (Nginx + React)
+# ──────────────────────────────────────────────
+
+frontend:
+  name: frontend
+  replicaCount: 1
+  image:
+    repository: technicaldomain/genai-learning-hub-frontend
+    tag: ""  # defaults to appVersion
+  serviceAccount:
+    create: false
+    name: ""
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  hpa:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+
+# ──────────────────────────────────────────────
+# Ingress
+# ──────────────────────────────────────────────
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations: {}
+  hosts:
+    - host: genai-learning-hub.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+          service: frontend
+        - path: /api
+          pathType: Prefix
+          service: backend
+        - path: /mcp
+          pathType: Prefix
+          service: backend
+        - path: /auth
+          pathType: Prefix
+          service: backend
+  tls: []
+  #  - secretName: genai-learning-hub-tls
+  #    hosts:
+  #      - genai-learning-hub.example.com
+
+# ──────────────────────────────────────────────
+# Shared
+# ──────────────────────────────────────────────
+
+securityContext:
+  runAsUser: 1001
+  runAsGroup: 1001
+  fsGroup: 1001
+  runAsNonRoot: true
+
+sharedConfigs: []
+sharedSecrets: []
+
+tolerations: []
+
+antiAffinityLabels:
+  - app.kubernetes.io/name

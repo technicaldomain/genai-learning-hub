@@ -1,0 +1,10 @@
+apiVersion: v2
+name: genai-learning-hub
+description: A Helm chart for the GenAI Learning Hub — Nx monorepo with React + Tailwind frontend and FastAPI backend
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+dependencies:
+  - name: common
+    version: "2.2.0"
+    repository: "oci://ghcr.io/technicaldomain/helm"
