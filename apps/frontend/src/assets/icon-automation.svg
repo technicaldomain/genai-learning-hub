@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <circle cx="40" cy="40" r="38" fill="#E0F2F1" stroke="#00897B" stroke-width="1.5"/>
+
+  <!-- Gear/cog representing automation -->
+  <g transform="translate(40, 40)">
+    <circle cx="0" cy="0" r="12" fill="#00897B" opacity="0.2" stroke="#00897B" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="5" fill="#00897B"/>
+    <!-- Gear teeth -->
+    <rect x="-2" y="-16" width="4" height="6" rx="1" fill="#00897B"/>
+    <rect x="-2" y="10" width="4" height="6" rx="1" fill="#00897B"/>
+    <rect x="-16" y="-2" width="6" height="4" rx="1" fill="#00897B"/>
+    <rect x="10" y="-2" width="6" height="4" rx="1" fill="#00897B"/>
+    <rect x="-2" y="-16" width="4" height="6" rx="1" fill="#00897B" transform="rotate(45)"/>
+    <rect x="-2" y="10" width="4" height="6" rx="1" fill="#00897B" transform="rotate(45)"/>
+    <rect x="-16" y="-2" width="6" height="4" rx="1" fill="#00897B" transform="rotate(45)"/>
+    <rect x="10" y="-2" width="6" height="4" rx="1" fill="#00897B" transform="rotate(45)"/>
+  </g>
+
+  <!-- Small check mark -->
+  <circle cx="56" cy="56" r="10" fill="#00BFA5"/>
+  <path d="M51 56 L54 59 L61 52" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

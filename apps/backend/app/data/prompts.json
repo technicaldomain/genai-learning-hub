@@ -1,0 +1,74 @@
+[
+  {
+    "id": "prompt-001",
+    "title": "Executive Summary Generator",
+    "description": "Generate a concise executive summary from a long document or report.",
+    "template": "Create a concise executive summary of the following document. Include: key findings (max 5), main recommendations, and critical action items. Keep it under 300 words.\n\nDocument:\n{document}",
+    "category": "summarization",
+    "tags": ["summary", "business", "reporting"],
+    "author": "Sarah Chen",
+    "usage_count": 127,
+    "rating": 4.8,
+    "created_at": "2026-04-01T00:00:00Z"
+  },
+  {
+    "id": "prompt-002",
+    "title": "Code Refactoring Partner",
+    "description": "Refactor code to improve readability, performance, and adherence to best practices.",
+    "template": "Review the following code and suggest improvements for:\n1. Readability and naming\n2. Performance optimization\n3. Error handling\n4. Security considerations\n5. Testability\n\nCode:\n```{language}\n{code}\n```",
+    "category": "coding",
+    "tags": ["refactoring", "code-quality", "best-practices"],
+    "author": "Marcus Rivera",
+    "usage_count": 93,
+    "rating": 4.6,
+    "created_at": "2026-04-05T00:00:00Z"
+  },
+  {
+    "id": "prompt-003",
+    "title": "Data Analysis Interpreter",
+    "description": "Describe and interpret data analysis results in plain language for stakeholders.",
+    "template": "Explain the following data analysis results in plain, non-technical language suitable for executive stakeholders. Highlight trends, anomalies, and business implications.\n\nResults:\n{results}",
+    "category": "analysis",
+    "tags": ["data-science", "interpretation", "business"],
+    "author": "James Liu",
+    "usage_count": 64,
+    "rating": 4.5,
+    "created_at": "2026-04-10T00:00:00Z"
+  },
+  {
+    "id": "prompt-004",
+    "title": "Creative Story Starter",
+    "description": "Generate creative writing prompts and story starters for brainstorming sessions.",
+    "template": "Write a creative story starter based on the following parameters:\n- Genre: {genre}\n- Tone: {tone}\n- Setting: {setting}\n- Word count: {word_count}\n\nMake it engaging and leave room for continuation.",
+    "category": "creative",
+    "tags": ["writing", "creativity", "brainstorming"],
+    "author": "Priya Patel",
+    "usage_count": 48,
+    "rating": 4.3,
+    "created_at": "2026-04-15T00:00:00Z"
+  },
+  {
+    "id": "prompt-005",
+    "title": "Professional Email Draft",
+    "description": "Draft professional emails for various business scenarios with customizable tone and length.",
+    "template": "Draft a professional email with the following parameters:\n- Purpose: {purpose}\n- Recipient: {recipient}\n- Tone: {tone}\n- Key points: {key_points}\n\nKeep it concise and action-oriented.",
+    "category": "writing",
+    "tags": ["email", "communication", "professional"],
+    "author": "Emma Thompson",
+    "usage_count": 156,
+    "rating": 4.7,
+    "created_at": "2026-04-20T00:00:00Z"
+  },
+  {
+    "id": "prompt-006",
+    "title": "API Documentation Generator",
+    "description": "Generate comprehensive API documentation from code or specifications.",
+    "template": "Generate API documentation for the following endpoint:\n- Method: {method}\n- URL: {url}\n- Parameters: {parameters}\n- Response: {response}\n\nInclude: description, parameters table, response schema, example request/response, and error codes.",
+    "category": "coding",
+    "tags": ["documentation", "api", "developer-tools"],
+    "author": "James Liu",
+    "usage_count": 72,
+    "rating": 4.4,
+    "created_at": "2026-05-01T00:00:00Z"
+  }
+]

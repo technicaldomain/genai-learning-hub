@@ -1,0 +1,31 @@
+# GenAI Learning Hub — Docker Compose
+
+services:
+  # ──────────────────────────────────────────────
+  # Frontend (React + Vite)
+  # ──────────────────────────────────────────────
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/frontend.Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # ──────────────────────────────────────────────
+  # Backend (FastAPI + uvicorn)
+  # ──────────────────────────────────────────────
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/backend.Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_NAME=GenAI Learning Hub
+      - DEBUG=false
+      - JWT_SECRET=change-me-in-production
+      - CORS_ORIGINS=http://localhost
+    restart: unless-stopped

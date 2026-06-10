@@ -1,0 +1,54 @@
+[
+  {
+    "id": "contrib-001",
+    "title": "Using AI for Competitive Intelligence",
+    "description": "Our team developed a workflow using AI to scrape and summarize competitor press releases and product announcements. The process takes 15 minutes instead of 2 hours of manual work.",
+    "author": "Alex Kim",
+    "author_department": "Product Strategy",
+    "type": "use-case",
+    "tags": ["competitive-intelligence", "automation", "product"],
+    "resources": ["res-001", "res-002"],
+    "created_at": "2026-05-20T10:00:00Z",
+    "updated_at": "2026-05-22T14:00:00Z",
+    "likes": 23
+  },
+  {
+    "id": "contrib-002",
+    "title": "Prompt Pattern: Role-Based Output Control",
+    "description": "A technique for controlling output format by assigning the AI a specific role with detailed responsibilities. Works across all major LLM providers.",
+    "author": "Maria Santos",
+    "author_department": "Engineering",
+    "type": "prompt",
+    "tags": ["prompt-engineering", "formatting", "technique"],
+    "resources": null,
+    "created_at": "2026-05-25T09:00:00Z",
+    "updated_at": "2026-05-25T09:00:00Z",
+    "likes": 18
+  },
+  {
+    "id": "contrib-003",
+    "title": "Lessons Learned: When AI Hallucinations Cost Us Time",
+    "description": "A candid post-mortem on an AI-generated report that contained factual errors. Key takeaways on validation, human oversight, and when NOT to use AI.",
+    "author": "David Park",
+    "author_department": "Marketing",
+    "type": "lesson-learned",
+    "tags": ["validation", "risk-management", "quality"],
+    "resources": ["res-007"],
+    "created_at": "2026-06-01T11:00:00Z",
+    "updated_at": "2026-06-02T16:00:00Z",
+    "likes": 31
+  },
+  {
+    "id": "contrib-004",
+    "title": "Quick Tip: Context Windows Are Your Friend",
+    "description": "Pro tip: Always include relevant context from previous messages in your prompts. Even with large context windows, providing explicit context improves accuracy by 30-50%.",
+    "author": "Rachel Foster",
+    "author_department": "Data Science",
+    "type": "tip",
+    "tags": ["tips", "best-practices", "efficiency"],
+    "resources": null,
+    "created_at": "2026-06-04T08:00:00Z",
+    "updated_at": "2026-06-04T08:00:00Z",
+    "likes": 15
+  }
+]

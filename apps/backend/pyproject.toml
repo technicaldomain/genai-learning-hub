@@ -1,0 +1,19 @@
+[project]
+name = "genai-learning-hub-backend"
+version = "0.1.0"
+requires-python = ">=3.12"
+
+dependencies = [
+  "fastapi",
+  "uvicorn[standard]",
+  "pydantic",
+  "pydantic-settings",
+  "python-jose[cryptography]",
+  "httpx",
+  "pyjwt",
+  "itsdangerous",
+  "python-dotenv==1.0.1",
+]
+
+[tool.setuptools.packages.find]
+include = ["app*"]

@@ -1,0 +1,119 @@
+[
+  {
+    "id": "path-001",
+    "title": "AI Fundamentals for Business Professionals",
+    "description": "A comprehensive introduction to artificial intelligence, covering core concepts, practical applications, and responsible usage for non-technical professionals.",
+    "level": "beginner",
+    "modules": [
+      {
+        "id": "mod-001-1",
+        "title": "What is AI?",
+        "description": "Understand the basics of artificial intelligence, machine learning, and generative AI.",
+        "resources": [],
+        "duration_minutes": 45
+      },
+      {
+        "id": "mod-001-2",
+        "title": "LLMs and Generative AI",
+        "description": "Learn how large language models work and what they can do.",
+        "resources": ["res-001"],
+        "duration_minutes": 60
+      },
+      {
+        "id": "mod-001-3",
+        "title": "AI in the Enterprise",
+        "description": "Explore how organizations are using AI and what governance looks like.",
+        "resources": ["res-007"],
+        "duration_minutes": 30
+      },
+      {
+        "id": "mod-001-4",
+        "title": "Hands-on: First AI Experience",
+        "description": "Try your first AI tools and learn prompt engineering basics.",
+        "resources": [],
+        "duration_minutes": 90
+      }
+    ],
+    "estimated_hours": 6,
+    "tags": ["basics", "enterprise", "non-technical"],
+    "created_at": "2026-05-01T00:00:00Z"
+  },
+  {
+    "id": "path-002",
+    "title": "Building AI Applications with LangChain",
+    "description": "Learn to build production-ready AI applications using the LangChain framework, from chains to agents.",
+    "level": "intermediate",
+    "modules": [
+      {
+        "id": "mod-002-1",
+        "title": "LangChain Foundations",
+        "description": "Set up your environment and learn the core building blocks.",
+        "resources": ["res-002"],
+        "duration_minutes": 90
+      },
+      {
+        "id": "mod-002-2",
+        "title": "Chains and Prompts",
+        "description": "Build multi-step AI workflows with prompt templates and output parsers.",
+        "resources": [],
+        "duration_minutes": 120
+      },
+      {
+        "id": "mod-002-3",
+        "title": "Memory and Context",
+        "description": "Implement conversation memory and context management.",
+        "resources": [],
+        "duration_minutes": 90
+      },
+      {
+        "id": "mod-002-4",
+        "title": "Building AI Agents",
+        "description": "Create agents that can use tools and make decisions.",
+        "resources": [],
+        "duration_minutes": 150
+      }
+    ],
+    "estimated_hours": 9,
+    "tags": ["langchain", "python", "development", "agents"],
+    "created_at": "2026-05-15T00:00:00Z"
+  },
+  {
+    "id": "path-003",
+    "title": "Advanced Prompt Engineering Techniques",
+    "description": "Master advanced prompt engineering for complex tasks including multi-step reasoning, tool use, and structured output.",
+    "level": "advanced",
+    "modules": [
+      {
+        "id": "mod-003-1",
+        "title": "Prompt Design Patterns",
+        "description": "Learn proven patterns for effective prompt engineering.",
+        "resources": [],
+        "duration_minutes": 60
+      },
+      {
+        "id": "mod-003-2",
+        "title": "Chain of Thought & Reasoning",
+        "description": "Techniques for eliciting multi-step reasoning from models.",
+        "resources": [],
+        "duration_minutes": 75
+      },
+      {
+        "id": "mod-003-3",
+        "title": "Structured Output & Validation",
+        "description": "Get reliable structured outputs with validation and error handling.",
+        "resources": [],
+        "duration_minutes": 90
+      },
+      {
+        "id": "mod-003-4",
+        "title": "Evaluation & Optimization",
+        "description": "Measure prompt quality and iteratively improve results.",
+        "resources": [],
+        "duration_minutes": 120
+      }
+    ],
+    "estimated_hours": 7,
+    "tags": ["prompt-engineering", "advanced", "optimization"],
+    "created_at": "2026-06-01T00:00:00Z"
+  }
+]

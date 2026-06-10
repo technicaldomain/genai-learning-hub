@@ -38,7 +38,16 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# Python virtualenv
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+
 .nx/cache
 .nx/workspace-data
 .claude/worktrees
 .claude/settings.local.json
+
+vite.config.*.timestamp*
+vitest.config.*.timestamp*

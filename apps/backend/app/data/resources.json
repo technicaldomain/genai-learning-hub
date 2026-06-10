@@ -1,0 +1,79 @@
+[
+  {
+    "id": "res-001",
+    "title": "OpenAI API",
+    "description": "Access GPT-4, GPT-3.5, DALL-E, and Whisper models via REST API. Industry-standard LLM platform with extensive documentation.",
+    "category": "api",
+    "url": "https://platform.openai.com",
+    "type": "api",
+    "tags": ["llm", "gpt", "chatgpt", "enterprise"],
+    "featured": true,
+    "created_at": "2026-01-10T00:00:00Z"
+  },
+  {
+    "id": "res-002",
+    "title": "LangChain",
+    "description": "Framework for building applications powered by LLMs. Provides chains, agents, memory, and tool integrations.",
+    "category": "framework",
+    "url": "https://python.langchain.com",
+    "type": "sdk",
+    "tags": ["framework", "chains", "agents", "python"],
+    "featured": true,
+    "created_at": "2026-01-10T00:00:00Z"
+  },
+  {
+    "id": "res-003",
+    "title": "Hugging Face Hub",
+    "description": "Open-source platform for collaborative AI. Host and discover models, datasets, and spaces.",
+    "category": "platform",
+    "url": "https://huggingface.co",
+    "type": "web-app",
+    "tags": ["models", "open-source", "datasets", "collaboration"],
+    "featured": false,
+    "created_at": "2026-01-15T00:00:00Z"
+  },
+  {
+    "id": "res-004",
+    "title": "GitHub Copilot",
+    "description": "AI pair programmer that suggests code and entire functions in your IDE. Supports multiple languages and editors.",
+    "category": "tool",
+    "url": "https://github.com/features/copilot",
+    "type": "cli-tool",
+    "tags": ["coding", "ide", "autocomplete", "productivity"],
+    "featured": true,
+    "created_at": "2026-02-01T00:00:00Z"
+  },
+  {
+    "id": "res-005",
+    "title": "Ollama",
+    "description": "Run open-source LLMs locally. Supports Llama, Mistral, CodeLlama, and many more models with a simple API.",
+    "category": "model",
+    "url": "https://ollama.ai",
+    "type": "cli-tool",
+    "tags": ["local", "open-source", "llama", "privacy"],
+    "featured": false,
+    "created_at": "2026-03-01T00:00:00Z"
+  },
+  {
+    "id": "res-006",
+    "title": "Microsoft Semantic Kernel",
+    "description": "SDK for integrating LLMs into enterprise applications with plugins, memory, and goal-oriented planning.",
+    "category": "framework",
+    "url": "https://github.com/microsoft/semantic-kernel",
+    "type": "sdk",
+    "tags": ["enterprise", "microsoft", "plugins", "planning"],
+    "featured": false,
+    "created_at": "2026-03-15T00:00:00Z"
+  },
+  {
+    "id": "res-007",
+    "title": "AI Governance Checklist",
+    "description": "Internal reference document covering responsible AI usage, data privacy, model validation, and compliance requirements.",
+    "category": "documentation",
+    "url": "/docs/ai-governance",
+    "type": "documentation",
+    "tags": ["governance", "compliance", "policy", "security"],
+    "featured": true,
+    "created_at": "2026-02-15T00:00:00Z"
+  }
+]

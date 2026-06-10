@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <!-- Background circle -->
+  <circle cx="40" cy="40" r="38" fill="#E3F2FD" stroke="#0D47A1" stroke-width="1.5"/>
+
+  <!-- Open book / learning icon -->
+  <g transform="translate(20, 22)">
+    <!-- Left page -->
+    <path d="M0 5 Q15 2 25 5 L25 28 Q15 25 0 28 Z" fill="#0D47A1" opacity="0.7"/>
+    <!-- Right page -->
+    <path d="M25 5 Q35 2 50 5 L50 28 Q35 25 25 28 Z" fill="#0D47A1" opacity="0.5"/>
+    <!-- Spine -->
+    <line x1="25" y1="5" x2="25" y2="28" stroke="#fff" stroke-width="1"/>
+    <!-- Text lines left -->
+    <line x1="5" y1="12" x2="20" y2="10" stroke="#fff" stroke-width="1.2" opacity="0.6"/>
+    <line x1="5" y1="17" x2="18" y2="15" stroke="#fff" stroke-width="1.2" opacity="0.6"/>
+    <!-- Text lines right -->
+    <line x1="30" y1="10" x2="45" y2="12" stroke="#fff" stroke-width="1.2" opacity="0.6"/>
+    <line x1="32" y1="15" x2="45" y2="17" stroke="#fff" stroke-width="1.2" opacity="0.6"/>
+  </g>
+
+  <!-- Lightbulb idea accent -->
+  <circle cx="55" cy="18" r="5" fill="#00BFA5" opacity="0.8"/>
+  <line x1="55" y1="13" x2="55" y2="10" stroke="#00BFA5" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="50" y1="15" x2="48" y2="13" stroke="#00BFA5" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="60" y1="15" x2="62" y2="13" stroke="#00BFA5" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

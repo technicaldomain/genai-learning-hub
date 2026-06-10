@@ -1,0 +1,62 @@
+[
+  {
+    "id": "news-001",
+    "title": "GPT-5 Released with Improved Reasoning Capabilities",
+    "summary": "OpenAI announces GPT-5 with 128K context window, enhanced reasoning, and native function calling.",
+    "content": "OpenAI has officially released GPT-5, marking a significant leap in AI capabilities. The new model features a 128,000 token context window, improved logical reasoning benchmarks, and native support for function calling without additional prompting. Enterprise customers will benefit from enhanced safety filters and dedicated fine-tuning endpoints.",
+    "source": "OpenAI Blog",
+    "url": "https://openai.com/blog/gpt5",
+    "image_url": "",
+    "tags": ["gpt", "openai", "release", "enterprise"],
+    "published_at": "2026-06-01T10:00:00Z",
+    "featured": true
+  },
+  {
+    "id": "news-002",
+    "title": "EU AI Act Enters Full Enforcement",
+    "summary": "The European Union's comprehensive AI regulation framework becomes fully enforceable across all member states.",
+    "content": "The EU AI Act is now fully in effect, establishing the world's most comprehensive AI regulatory framework. Organizations operating within the EU must now comply with risk classification, transparency requirements, and fundamental rights assessments for AI systems. Key deadlines for compliance have been set for Q3 2026.",
+    "source": "EU Commission",
+    "url": "https://commission.europa.eu/ai-act",
+    "image_url": "",
+    "tags": ["regulation", "eu", "compliance", "policy"],
+    "published_at": "2026-05-28T14:00:00Z",
+    "featured": true
+  },
+  {
+    "id": "news-003",
+    "title": "LangChain 1.0 Launches with Major Performance Updates",
+    "summary": "The popular LLM framework releases stable 1.0 with streaming, memory improvements, and new tool integrations.",
+    "content": "LangChain has announced the stable release of version 1.0. Key features include dramatically improved streaming performance, a redesigned memory system with persistent state, new tool integrations for enterprise systems, and a simplified API surface that reduces boilerplate by 40%.",
+    "source": "LangChain Blog",
+    "url": "https://blog.langchain.dev/v1-release",
+    "image_url": "",
+    "tags": ["langchain", "framework", "release", "python"],
+    "published_at": "2026-05-25T09:00:00Z",
+    "featured": false
+  },
+  {
+    "id": "news-004",
+    "title": "Internal AI Adoption Surges 300% This Quarter",
+    "summary": "Company-wide AI tool usage report shows dramatic increase in employee engagement with approved AI platforms.",
+    "content": "The quarterly AI adoption report reveals a 300% increase in usage of approved AI tools across the organization. The Sales department leads with 78% of team members actively using AI for content generation, while Engineering shows strong adoption of AI-assisted coding tools. Key success factors include executive sponsorship, dedicated training sessions, and the new AI skills marketplace.",
+    "source": "Internal Report",
+    "url": "",
+    "image_url": "",
+    "tags": ["internal", "adoption", "quarterly-report"],
+    "published_at": "2026-06-05T08:00:00Z",
+    "featured": true
+  },
+  {
+    "id": "news-005",
+    "title": "New Guidelines Published for Responsible AI Development",
+    "summary": "Industry consortium releases updated best practices for ethical AI development and deployment.",
+    "content": "A consortium of leading technology companies and academic institutions has published updated guidelines for responsible AI development. The guidelines cover fairness assessment, bias mitigation, transparency requirements, and human oversight mechanisms. Organizations are encouraged to adopt these practices as part of their AI governance framework.",
+    "source": "AI Ethics Consortium",
+    "url": "https://aiethics.org/guidelines-2026",
+    "image_url": "",
+    "tags": ["ethics", "responsible-ai", "governance", "best-practices"],
+    "published_at": "2026-06-03T11:00:00Z",
+    "featured": false
+  }
+]

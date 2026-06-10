@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <circle cx="40" cy="40" r="38" fill="#F3E5F5" stroke="#6A1B9A" stroke-width="1.5"/>
+
+  <!-- Path/journey steps -->
+  <g transform="translate(20, 25)">
+    <!-- Step 1 -->
+    <circle cx="0" cy="0" r="6" fill="#6A1B9A" opacity="0.8"/>
+    <!-- Step 2 -->
+    <circle cx="18" cy="-8" r="5" fill="#6A1B9A" opacity="0.6"/>
+    <!-- Step 3 -->
+    <circle cx="36" cy="-4" r="5" fill="#6A1B9A" opacity="0.5"/>
+    <!-- Step 4 -->
+    <circle cx="50" cy="0" r="4" fill="#6A1B9A" opacity="0.4"/>
+
+    <!-- Connecting path -->
+    <path d="M0 0 L18 -8 L36 -4 L50 0" fill="none" stroke="#6A1B9A" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.4"/>
+  </g>
+
+  <!-- Arrow at end -->
+  <path d="M52 -3 L58 -3 L58 -6 L61 -3 L58 0 L58 -3" fill="#6A1B9A" opacity="0.5"/>
+</svg>

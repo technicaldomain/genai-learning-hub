@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <circle cx="40" cy="40" r="38" fill="#FFF8E1" stroke="#F57F17" stroke-width="1.5"/>
+
+  <!-- People/community — 3 connected figures -->
+  <g transform="translate(40, 40)">
+    <!-- Left person -->
+    <circle cx="-16" cy="-8" r="6" fill="#F57F17" opacity="0.5"/>
+    <circle cx="-16" cy="-8" r="2.5" fill="#F57F17" opacity="0.8"/>
+    <path d="M-24 -2 L-8 -2" stroke="#F57F17" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+    <path d="M-22 6 C-22 2 -10 2 -10 6" fill="none" stroke="#F57F17" stroke-width="2" opacity="0.5"/>
+
+    <!-- Center person (larger) -->
+    <circle cx="0" cy="-10" r="8" fill="#F57F17" opacity="0.7"/>
+    <circle cx="0" cy="-10" r="3" fill="#F57F17" opacity="1"/>
+    <path d="M-12 0 L12 0" stroke="#F57F17" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+    <path d="M-10 12 C-10 5 10 5 10 12" fill="none" stroke="#F57F17" stroke-width="2" opacity="0.7"/>
+
+    <!-- Right person -->
+    <circle cx="16" cy="-8" r="6" fill="#F57F17" opacity="0.5"/>
+    <circle cx="16" cy="-8" r="2.5" fill="#F57F17" opacity="0.8"/>
+    <path d="M8 -2 L24 -2" stroke="#F57F17" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+    <path d="M10 6 C10 2 22 2 22 6" fill="none" stroke="#F57F17" stroke-width="2" opacity="0.5"/>
+  </g>
+
+  <!-- Connection ring -->
+  <circle cx="0" cy="0" r="14" fill="none" stroke="#00BFA5" stroke-width="1" stroke-dasharray="2 2" opacity="0.3"/>
+</svg>

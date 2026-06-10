@@ -1,0 +1,97 @@
+[
+  {
+    "id": "skill-001",
+    "title": "Automated Data Summarizer",
+    "description": "A reusable AI skill that ingests raw datasets and produces executive summaries with key insights, trends, and anomalies. Integrates with pandas and LLM APIs.",
+    "category": "data-processing",
+    "level": "intermediate",
+    "author": "Sarah Chen",
+    "tags": ["summarization", "data-analysis", "pandas", "reporting"],
+    "assets": [
+      {
+        "type": "code",
+        "name": "summarize_data.py",
+        "content": "import pandas as pd\nfrom openai import OpenAI\n\ndef summarize_dataset(df: pd.DataFrame, model: str = 'gpt-4'):\n    client = OpenAI()\n    summary = client.chat.completions.create(\n        model=model,\n        messages=[{'role': 'system', 'content': 'You are a data analyst...'}]\n    )\n    return summary.choices[0].message.content"
+      }
+    ],
+    "created_at": "2026-05-10T09:00:00Z",
+    "updated_at": "2026-06-01T14:30:00Z",
+    "popularity": 42
+  },
+  {
+    "id": "skill-002",
+    "title": "Code Review Assistant",
+    "description": "Analyzes pull request diffs and generates structured review comments focusing on security, performance, and style violations.",
+    "category": "code-assistance",
+    "level": "advanced",
+    "author": "Marcus Rivera",
+    "tags": ["code-review", "security", "automation", "git"],
+    "assets": [
+      {
+        "type": "script",
+        "name": "code_review.sh",
+        "content": "#!/bin/bash\n# Code Review Assistant\nPR_URL=$1\necho \"Analyzing PR: $PR_URL\"\n# ... integration with AI model"
+      }
+    ],
+    "created_at": "2026-04-22T11:00:00Z",
+    "updated_at": "2026-05-28T16:00:00Z",
+    "popularity": 38
+  },
+  {
+    "id": "skill-003",
+    "title": "Marketing Copy Generator",
+    "description": "Generates multi-channel marketing copy (email, social media, blog posts) from a brief. Supports brand voice customization.",
+    "category": "content-generation",
+    "level": "beginner",
+    "author": "Priya Patel",
+    "tags": ["marketing", "copywriting", "content", "branding"],
+    "assets": [
+      {
+        "type": "template",
+        "name": "marketing_template.json",
+        "content": "{\n  \"channels\": [\"email\", \"linkedin\", \"twitter\"],\n  \"tone\": \"professional\",\n  \"length\": \"medium\"\n}"
+      }
+    ],
+    "created_at": "2026-06-01T08:00:00Z",
+    "updated_at": "2026-06-01T08:00:00Z",
+    "popularity": 27
+  },
+  {
+    "id": "skill-004",
+    "title": "SQL Query Optimizer",
+    "description": "Takes SQL queries and suggests performance improvements with EXPLAIN plan analysis and rewritten queries.",
+    "category": "analysis",
+    "level": "intermediate",
+    "author": "James Liu",
+    "tags": ["sql", "database", "performance", "optimization"],
+    "assets": [
+      {
+        "type": "notebook",
+        "name": "sql_optimizer.ipynb",
+        "content": "{\"cells\": [{\"type\": \"code\", \"source\": \"import sqlparse\"}]}"
+      }
+    ],
+    "created_at": "2026-03-15T10:00:00Z",
+    "updated_at": "2026-05-20T12:00:00Z",
+    "popularity": 31
+  },
+  {
+    "id": "skill-005",
+    "title": "Meeting Notes to Action Items",
+    "description": "Processes raw meeting transcripts and extracts action items, decisions, and open questions with assignees and deadlines.",
+    "category": "automation",
+    "level": "beginner",
+    "author": "Emma Thompson",
+    "tags": ["meetings", "productivity", "nlp", "automation"],
+    "assets": [
+      {
+        "type": "code",
+        "name": "meeting_notes.py",
+        "content": "from openai import OpenAI\n\ndef extract_action_items(transcript: str):\n    client = OpenAI()\n    response = client.chat.completions.create(\n        model='gpt-4',\n        messages=[{'role': 'user', 'content': transcript}]\n    )\n    return response.choices[0].message.content"
+      }
+    ],
+    "created_at": "2026-05-05T13:00:00Z",
+    "updated_at": "2026-06-03T09:00:00Z",
+    "popularity": 55
+  }
+]
