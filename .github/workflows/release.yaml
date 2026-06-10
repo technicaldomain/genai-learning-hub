@@ -17,7 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       release_version: ${{ steps.semantic-release.outputs.release_version }}
-      released: ${{ steps.semantic-release.outputs.released }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -76,10 +75,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract version
-        id: version
-        run: echo "version=${{ needs.semantic-release.outputs.release_version }}" >> $GITHUB_OUTPUT
-
       - name: Build and push ${{ matrix.name }}
         uses: docker/build-push-action@v6
         with:
@@ -89,7 +84,7 @@ jobs:
           push: true
           tags: |
             ${{ matrix.image }}:latest
-            ${{ matrix.image }}:${{ steps.version.outputs.version }}
+            ${{ matrix.image }}:${{ needs.semantic-release.outputs.release_version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -100,7 +95,7 @@ jobs:
 
       - name: Sign images with GitHub OIDC
         run: |
-          cosign sign --yes ${{ matrix.image }}:${{ steps.version.outputs.version }}
+          cosign sign --yes ${{ matrix.image }}:${{ needs.semantic-release.outputs.release_version }}
           cosign sign --yes ${{ matrix.image }}:latest
 
   release-helm:
@@ -128,11 +123,6 @@ jobs:
         working-directory: helm
         run: helm dependency update .
 
-      - name: Extract version
-        id: version
-        run: echo "version=${{ needs.semantic-release.outputs.release_version }}" >> $GITHUB_OUTPUT
-        working-directory: helm
-
       - name: Package chart
         working-directory: helm
         run: helm package . --destination /tmp/release-packages/
@@ -140,7 +130,7 @@ jobs:
       - name: Push chart to OCI
         working-directory: /tmp/release-packages
         run: |
-          helm push genai-learning-hub-${{ steps.version.outputs.version }}.tgz oci://ghcr.io/technicaldomain/helm
+          helm push genai-learning-hub-${{ needs.semantic-release.outputs.release_version }}.tgz oci://ghcr.io/technicaldomain/helm
 
       - name: Sign chart with cosign
         uses: sigstore/cosign-installer@v4.1.2
@@ -149,4 +139,4 @@ jobs:
 
       - name: Sign chart with GitHub OIDC
         run: |
-          cosign sign --yes ghcr.io/technicaldomain/helm/genai-learning-hub:${{ steps.version.outputs.version }}
+          cosign sign --yes ghcr.io/technicaldomain/helm/genai-learning-hub:${{ needs.semantic-release.outputs.release_version }}
