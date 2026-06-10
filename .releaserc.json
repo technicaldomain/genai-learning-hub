@@ -7,7 +7,7 @@
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     ["@semantic-release/exec", {
-      "publishCmd": "echo \"RELEASE_VERSION=${nextRelease.version}\" >> $GITHUB_ENV"
+      "publishCmd": "echo \"release_version=${nextRelease.version}\" >> $GITHUB_OUTPUT"
     }],
     ["@semantic-release/git", {
       "assets": [

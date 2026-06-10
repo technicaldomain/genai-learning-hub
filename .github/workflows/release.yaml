@@ -41,20 +41,12 @@ jobs:
         id: semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          npx semantic-release 2>&1 | tee /tmp/semantic-release.log
-          RELEASE_VERSION=$(cat /tmp/semantic-release.log | grep "RELEASE_VERSION=" | sed 's/.*RELEASE_VERSION=\(.*\)/\1/')
-          RELEASED="false"
-          if [ -n "$RELEASE_VERSION" ]; then
-            RELEASED="true"
-          fi
-          echo "release_version=$RELEASE_VERSION" >> $GITHUB_OUTPUT
-          echo "released=$RELEASED" >> $GITHUB_OUTPUT
+        run: npx semantic-release
 
   build-and-push:
     name: Build and Push Docker Images
     needs: semantic-release
-    if: ${{ needs.semantic-release.outputs.released == 'true' || github.event_name == 'workflow_dispatch' }}
+    if: ${{ needs.semantic-release.outputs.release_version != '' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -86,12 +78,7 @@ jobs:
 
       - name: Extract version
         id: version
-        run: |
-          if [ -n "${{ needs.semantic-release.outputs.release_version }}" ]; then
-            echo "version=${{ needs.semantic-release.outputs.release_version }}" >> $GITHUB_OUTPUT
-          else
-            echo "version=latest" >> $GITHUB_OUTPUT
-          fi
+        run: echo "version=${{ needs.semantic-release.outputs.release_version }}" >> $GITHUB_OUTPUT
 
       - name: Build and push ${{ matrix.name }}
         uses: docker/build-push-action@v6
@@ -119,7 +106,7 @@ jobs:
   release-helm:
     name: Release Helm Chart
     needs: semantic-release
-    if: ${{ needs.semantic-release.outputs.released == 'true' || github.event_name == 'workflow_dispatch' }}
+    if: ${{ needs.semantic-release.outputs.release_version != '' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -143,13 +130,8 @@ jobs:
 
       - name: Extract version
         id: version
-        run: |
-          if [ -n "${{ needs.semantic-release.outputs.release_version }}" ]; then
-            echo "version=${{ needs.semantic-release.outputs.release_version }}" >> $GITHUB_OUTPUT
-          else
-            echo "version=0.0.0" >> $GITHUB_OUTPUT
-          fi
-          echo "Using version: ${{ steps.version.outputs.version }}"
+        run: echo "version=${{ needs.semantic-release.outputs.release_version }}" >> $GITHUB_OUTPUT
+        working-directory: helm
 
       - name: Package chart
         working-directory: helm
