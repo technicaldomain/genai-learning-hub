@@ -1,0 +1,28 @@
+{
+  "branches": [
+    { "name": "main" }
+  ],
+  "tagFormat": "v${version}",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    ["@semantic-release/exec", {
+      "publishCmd": "echo \"RELEASE_VERSION=${nextRelease.version}\" >> $GITHUB_ENV"
+    }],
+    ["@semantic-release/git", {
+      "assets": [
+        "package.json",
+        "apps/backend/pyproject.toml",
+        "helm/Chart.yaml"
+      ],
+      "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+    }],
+    ["@semantic-release/github", {
+      "successComment": false,
+      "failTitle": false,
+      "labels": ["release"],
+      "addedLabels": ["release"],
+      "removedLabels": []
+    }]
+  ]
+}
