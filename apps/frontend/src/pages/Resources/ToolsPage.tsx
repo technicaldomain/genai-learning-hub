@@ -1,10 +1,10 @@
 /**
- * Tools & APIs — browse approved resources. Pure Tailwind.
+ * Approved Tools & APIs — browse approved resources. Pure Tailwind.
  */
 
 import * as React from "react";
 import Section from "../../layout/Section";
-import { useResources } from "../../api/hooks";
+import { useTools } from "../../api/hooks";
 
 const categoryLabels: Record<string, string> = {
   model: "Model", platform: "Platform", tool: "Tool", api: "API",
@@ -15,12 +15,12 @@ const iconColors: Record<string, string> = {
   framework: "#1E88E5", documentation: "#64DD17", other: "#9E9E9E",
 };
 
-export default function ResourcesPage() {
+export default function ToolsPage() {
   const [search, setSearch] = React.useState("");
   const [category, setCategory] = React.useState("");
   const [page, setPage] = React.useState(1);
 
-  const { data, isLoading } = useResources({ search: search || undefined, category: category || undefined, page });
+  const { data, isLoading } = useTools({ search: search || undefined, category: category || undefined, page });
   const resources = data?.data ?? [];
   const total = data?.total ?? 0;
 

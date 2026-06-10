@@ -1,9 +1,11 @@
 /**
- * Learning Paths — browse guided learning journeys. Pure Tailwind.
+ * Learning Paths — browse and enroll in guided learning journeys. Pure Tailwind.
  */
 
 import * as React from "react";
 import Section from "../../layout/Section";
+import { useStartLearning } from "../../api/hooks";
+import { BookOpen, Check, Clock, CheckCircle } from "lucide-react";
 
 interface Module { id: string; title: string; description: string; durationMinutes: number }
 interface Path {
@@ -40,30 +42,69 @@ const levelMap: Record<string, { label: string; color: string }> = {
 
 export default function LearningPathsPage() {
   const [openModule, setOpenModule] = React.useState<string | null>(null);
+  const [enrolledPaths, setEnrolledPaths] = React.useState<Set<string>>(new Set());
+  const [successMsg, setSuccessMsg] = React.useState("");
+  const startLearning = useStartLearning();
+
+  const handleEnroll = async (path: Path) => {
+    if (enrolledPaths.has(path.id)) return;
+    await startLearning.mutateAsync({ path_id: path.id, path_title: path.title });
+    setEnrolledPaths((prev) => new Set(prev).add(path.id));
+    setSuccessMsg(`Enrolled in "${path.title}"!`);
+    setTimeout(() => setSuccessMsg(""), 3000);
+  };
 
   return (
     <Section>
-      <h1 className="text-3xl font-bold">Learning Paths</h1>
-      <p className="text-neutral-600 dark:text-neutral-400">Guided journeys from AI basics to advanced techniques.</p>
+      <h1 className="text-2xl font-bold">Learning Paths</h1>
+      <p className="text-sm text-neutral-600 dark:text-neutral-400">Guided journeys from AI basics to advanced techniques.</p>
+
+      {/* Success toast */}
+      {successMsg && (
+        <div className="rounded-lg border border-green-200 bg-green-50 p-4 flex items-center gap-2 text-sm text-green-700 dark:border-green-800 dark:bg-green-950/30 dark:text-green-400">
+          <Check className="h-4 w-4" />
+          {successMsg}
+        </div>
+      )}
 
       <div className="space-y-4">
         {mockPaths.map((path) => {
           const lc = levelMap[path.level] ?? levelMap.beginner;
+          const isEnrolled = enrolledPaths.has(path.id);
           return (
             <div key={path.id} className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-800">
               <div className="p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <svg className="h-8 w-8 text-primary-500 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                <div className="flex items-start gap-3 mb-2">
+                  <BookOpen className="h-8 w-8 text-primary-500 dark:text-primary-400 mt-0.5 shrink-0" />
                   <div className="flex-1">
                     <h2 className="text-xl font-semibold">{path.title}</h2>
-                    <div className="flex gap-3 mt-1">
+                    <div className="flex gap-3 mt-1 flex-wrap">
                       <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${lc.color}`}>{lc.label}</span>
                       <span className="text-xs text-neutral-500 flex items-center gap-1">
-                        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <Clock className="h-3.5 w-3.5" />
                         {path.estimated_hours}h
                       </span>
+                      <span className="text-xs text-neutral-500">{path.modules.length} modules</span>
                     </div>
                   </div>
+                  <button
+                    onClick={() => handleEnroll(path)}
+                    disabled={isEnrolled || startLearning.isPending}
+                    className={`shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      isEnrolled
+                        ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300 border border-green-200 dark:border-green-800"
+                        : "bg-primary-500 text-white hover:bg-primary-600 disabled:opacity-50"
+                    }`}
+                  >
+                    {isEnrolled ? (
+                      <>
+                        <CheckCircle className="h-4 w-4" />
+                        Enrolled
+                      </>
+                    ) : (
+                      "Start Learning"
+                    )}
+                  </button>
                 </div>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">{path.description}</p>
                 <h3 className="text-sm font-semibold mb-2">Modules</h3>

@@ -16,10 +16,12 @@ import {
 import HomePage from "../pages/Home/HomePage";
 import SkillsPage from "../pages/Skills/SkillsPage";
 import PromptsPage from "../pages/Prompts/PromptsPage";
-import ResourcesPage from "../pages/Resources/ResourcesPage";
+import ToolsPage from "../pages/Resources/ToolsPage";
 import LearningPathsPage from "../pages/LearningPaths/LearningPathsPage";
 import NewsPage from "../pages/News/NewsPage";
-import CommunityPage from "../pages/Community/CommunityPage";
+import ContributionsPage from "../pages/Community/ContributionsPage";
+import ShowcasePage from "../pages/Community/ShowcasePage";
+import McpConnectPage from "../pages/Community/McpConnectPage";
 import LoginPage from "../pages/Auth/LoginPage";
 import CallbackPage from "../pages/Auth/CallbackPage";
 
@@ -132,12 +134,17 @@ const router = createBrowserRouter([
     element: <AuthGuard><MainLayout /></AuthGuard>,
     children: [
       { index: true, element: <HomePage /> },
-      { path: "skills", element: <SkillsPage /> },
-      { path: "prompts", element: <PromptsPage /> },
-      { path: "resources", element: <ResourcesPage /> },
-      { path: "learning-paths", element: <LearningPathsPage /> },
-      { path: "news", element: <NewsPage /> },
-      { path: "community", element: <CommunityPage /> },
+      // Marketplace
+      { path: "marketplace/skills", element: <SkillsPage /> },
+      { path: "marketplace/prompts", element: <PromptsPage /> },
+      { path: "marketplace/tools", element: <ToolsPage /> },
+      // Learn
+      { path: "learn/paths", element: <LearningPathsPage /> },
+      { path: "learn/news", element: <NewsPage /> },
+      // Community
+      { path: "community/contributions", element: <ContributionsPage /> },
+      { path: "community/showcases", element: <ShowcasePage /> },
+      { path: "community/mcp-connect", element: <McpConnectPage /> },
       { path: "*", element: <Navigate to="/" replace /> },
     ],
   },

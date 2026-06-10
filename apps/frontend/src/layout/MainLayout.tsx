@@ -17,6 +17,9 @@ import {
   GraduationCapIcon,
   NewspaperIcon,
   UsersIcon,
+  LightbulbIcon,
+  RocketIcon,
+  ServerIcon,
   SunIcon,
   MoonIcon,
   MonitorIcon,
@@ -28,24 +31,56 @@ import {
 
 const DRAWER_WIDTH = 260;
 
-type NavItem = { label: string; path: string; icon: React.ReactNode };
+type NavGroup = {
+  label: string;
+  icon: React.ReactNode;
+  items: { label: string; path: string; icon: React.ReactNode }[];
+};
 
-const navItems: NavItem[] = [
-  { label: "Home", path: "/", icon: <HomeIcon className="h-5 w-5" /> },
-  { label: "AI Skills", path: "/skills", icon: <WrenchIcon className="h-5 w-5" /> },
-  { label: "Prompt Library", path: "/prompts", icon: <TextQuoteIcon className="h-5 w-5" /> },
-  { label: "Tools & APIs", path: "/resources", icon: <PuzzleIcon className="h-5 w-5" /> },
-  { label: "Learning Paths", path: "/learning-paths", icon: <GraduationCapIcon className="h-5 w-5" /> },
-  { label: "News & Updates", path: "/news", icon: <NewspaperIcon className="h-5 w-5" /> },
-  { label: "Community", path: "/community", icon: <UsersIcon className="h-5 w-5" /> },
+const navGroups: NavGroup[] = [
+  {
+    label: "Marketplace",
+    icon: <WrenchIcon className="h-4 w-4" />,
+    items: [
+      { label: "Skills & Automations", path: "/marketplace/skills", icon: <WrenchIcon className="h-4 w-4" /> },
+      { label: "Prompt Templates", path: "/marketplace/prompts", icon: <TextQuoteIcon className="h-4 w-4" /> },
+      { label: "Approved Tools & APIs", path: "/marketplace/tools", icon: <PuzzleIcon className="h-4 w-4" /> },
+    ],
+  },
+  {
+    label: "Learn",
+    icon: <GraduationCapIcon className="h-4 w-4" />,
+    items: [
+      { label: "Learning Paths", path: "/learn/paths", icon: <GraduationCapIcon className="h-4 w-4" /> },
+      { label: "News & Updates", path: "/learn/news", icon: <NewspaperIcon className="h-4 w-4" /> },
+    ],
+  },
+  {
+    label: "Community",
+    icon: <UsersIcon className="h-4 w-4" />,
+    items: [
+      { label: "Contributions & Tips", path: "/community/contributions", icon: <LightbulbIcon className="h-4 w-4" /> },
+      { label: "Use Case Showcase", path: "/community/showcases", icon: <RocketIcon className="h-4 w-4" /> },
+      { label: "MCP Connect", path: "/community/mcp-connect", icon: <ServerIcon className="h-4 w-4" /> },
+    ],
+  },
 ];
 
 function Sidebar({ onClose }: { onClose?: () => void }) {
   return (
     <aside className="h-full flex flex-col bg-white dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-800">
-      <nav className="flex-1 py-2 px-3 space-y-0.5">
-        {navItems.map((item) => (
-          <SidebarLink key={item.path} {...item} onClose={onClose} />
+      <nav className="flex-1 py-2 px-3 space-y-4 overflow-y-auto">
+        {navGroups.map((group) => (
+          <div key={group.label}>
+            <div className="px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+              {group.label}
+            </div>
+            <div className="space-y-0.5">
+              {group.items.map((item) => (
+                <SidebarLink key={item.path} {...item} onClose={onClose} />
+              ))}
+            </div>
+          </div>
         ))}
       </nav>
       <div className="p-4 text-center">

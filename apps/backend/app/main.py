@@ -10,10 +10,11 @@ from app.auth.middleware import SessionMiddleware
 from app.routes.auth import router as auth_router
 from app.routes.health import router as health_router
 from app.routes.me import router as me_router
+from app.routes.contributions import router as contributions_router
+from app.routes.marketplace import router as marketplace_router
 from app.routes.news import router as news_router
-from app.routes.prompts import router as prompts_router
-from app.routes.resources import router as resources_router
-from app.routes.skills import router as skills_router
+from app.routes.showcases import router as showcases_router
+from app.routes.mcp import router as mcp_router
 
 app = FastAPI(
     title="GenAI Learning Hub",
@@ -54,7 +55,8 @@ app.include_router(auth_router)
 # API routes (prefix /api)
 app.include_router(health_router, prefix="/api")
 app.include_router(me_router, prefix="/api")
-app.include_router(skills_router, prefix="/api")
-app.include_router(resources_router, prefix="/api")
-app.include_router(prompts_router, prefix="/api")
+app.include_router(marketplace_router, prefix="/api")
+app.include_router(contributions_router, prefix="/api")
+app.include_router(showcases_router, prefix="/api")
+app.include_router(mcp_router, prefix="/api")
 app.include_router(news_router, prefix="/api")

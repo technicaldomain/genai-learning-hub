@@ -1,0 +1,46 @@
+[
+  {
+    "id": "fraud-detection",
+    "title": "Real-time Fraud Detection with ML",
+    "description": "A production ML pipeline that detects fraudulent transactions in real-time using anomaly detection on streaming data from Kafka.",
+    "category": "industry-solution",
+    "author": "Jane Smith",
+    "author_department": "Data Science",
+    "tags": ["fraud-detection", "ml-pipeline", "kafka", "real-time"],
+    "resources": [
+      { "name": "Architecture Diagram", "url": "https://example.com/fraud-detection-arch", "type": "link" },
+      { "name": "Documentation", "url": "https://example.com/fraud-detection-docs", "type": "link" }
+    ],
+    "status": "active",
+    "created_at": "2026-05-01T10:00:00Z",
+    "updated_at": "2026-05-15T14:30:00Z"
+  },
+  {
+    "id": "doc-summarizer",
+    "title": "Automated Document Summarization",
+    "description": "Internal tool that uses LLMs to summarize legal documents for the compliance team. Reduces review time by 60%.",
+    "category": "internal-tool",
+    "author": "John Doe",
+    "author_department": "Legal Tech",
+    "tags": ["llm", "summarization", "legal", "internal"],
+    "resources": [
+      { "name": "GitHub Repo", "url": "https://github.example.com/doc-summarizer", "type": "link" }
+    ],
+    "status": "active",
+    "created_at": "2026-04-20T08:00:00Z",
+    "updated_at": "2026-05-10T12:00:00Z"
+  },
+  {
+    "id": "prompt-ranker",
+    "title": "Prompt Quality Ranking Experiment",
+    "description": "Experiment to rank prompts by quality using human feedback and automatic metrics. Results feed into the Prompt Library recommendation engine.",
+    "category": "experiment",
+    "author": "Alice Johnson",
+    "author_department": "AI Research",
+    "tags": ["prompts", "ml-ranking", "experiment"],
+    "resources": [],
+    "status": "active",
+    "created_at": "2026-06-01T09:00:00Z",
+    "updated_at": "2026-06-05T16:00:00Z"
+  }
+]

@@ -91,6 +91,19 @@ class ContributionType(str, Enum):
     tip = "tip"
 
 
+class ShowcaseCategory(str, Enum):
+    industry_solution = "industry-solution"
+    internal_tool = "internal-tool"
+    proof_of_concept = "proof-of-concept"
+    experiment = "experiment"
+    other = "other"
+
+
+class McpTransport(str, Enum):
+    sse = "sse"
+    stdio = "stdio"
+
+
 # ---------------------------------------------------------------------------
 # User
 # ---------------------------------------------------------------------------
@@ -228,6 +241,55 @@ class CommunityContribution(CamelBase):
     created_at: datetime
     updated_at: datetime
     likes: Optional[int] = None
+
+
+# ---------------------------------------------------------------------------
+# Showcase
+# ---------------------------------------------------------------------------
+
+
+class ShowcaseResource(CamelBase):
+    name: str
+    url: Optional[str] = None
+    type: str = "link"
+
+
+class Showcase(CamelBase):
+    id: str
+    title: str
+    description: str
+    category: ShowcaseCategory
+    author: str
+    author_department: Optional[str] = None
+    tags: List[str] = Field(default_factory=list)
+    resources: List[ShowcaseResource] = Field(default_factory=list)
+    status: str = "active"
+    created_at: datetime
+    updated_at: datetime
+
+
+# ---------------------------------------------------------------------------
+# MCP Server
+# ---------------------------------------------------------------------------
+
+
+class McpServerConfig(CamelBase):
+    command: Optional[str] = None
+    args: List[str] = Field(default_factory=list)
+    url: Optional[str] = None
+    headers: Optional[dict] = None
+
+
+class McpServer(CamelBase):
+    id: str
+    name: str
+    description: str
+    transport: McpTransport
+    config: McpServerConfig
+    auth_required: bool = True
+    oidc_scopes: Optional[List[str]] = None
+    created_at: datetime
+    updated_at: datetime
 
 
 # ---------------------------------------------------------------------------

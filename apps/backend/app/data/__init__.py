@@ -41,3 +41,7 @@ def get_learning_paths() -> list[dict[str, Any]]:
 
 def get_contributions() -> list[dict[str, Any]]:
     return _load_json("contributions.json")
+
+
+def get_showcases() -> list[dict[str, Any]]:
+    return _load_json("showcases.json")

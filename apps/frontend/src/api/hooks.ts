@@ -2,7 +2,7 @@
  * API hooks — TanStack Query hooks for all GenAI Learning Hub endpoints.
  */
 
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "./client";
 import type {
   Skill,
@@ -11,6 +11,8 @@ import type {
   NewsItem,
   LearningPath,
   CommunityContribution,
+  Showcase,
+  McpServer,
   User,
   PaginatedResponse,
 } from "@genai-learning-hub/shared-types";
@@ -50,7 +52,7 @@ export function useCurrentUser() {
 }
 
 // ---------------------------------------------------------------------------
-// Skills
+// Skills (Marketplace)
 // ---------------------------------------------------------------------------
 
 interface SkillsParams {
@@ -72,15 +74,15 @@ export function useSkills(params: SkillsParams = {}) {
 
   return useQuery<PaginatedResponse<Skill>>({
     queryKey: ["skills", query],
-    queryFn: () => api.get<PaginatedResponse<Skill>>(`/skills?${query}`),
+    queryFn: () => api.get<PaginatedResponse<Skill>>(`/marketplace/skills?${query}`),
   });
 }
 
 // ---------------------------------------------------------------------------
-// Resources
+// Tools / Resources (Marketplace)
 // ---------------------------------------------------------------------------
 
-interface ResourcesParams {
+interface ToolsParams {
   category?: string;
   type?: string;
   search?: string;
@@ -89,7 +91,7 @@ interface ResourcesParams {
   pageSize?: number;
 }
 
-export function useResources(params: ResourcesParams = {}) {
+export function useTools(params: ToolsParams = {}) {
   const query = new URLSearchParams({
     page: String(params.page ?? 1),
     page_size: String(params.pageSize ?? 10),
@@ -100,13 +102,13 @@ export function useResources(params: ResourcesParams = {}) {
   }).toString();
 
   return useQuery<PaginatedResponse<Resource>>({
-    queryKey: ["resources", query],
-    queryFn: () => api.get<PaginatedResponse<Resource>>(`/resources?${query}`),
+    queryKey: ["tools", query],
+    queryFn: () => api.get<PaginatedResponse<Resource>>(`/marketplace/tools?${query}`),
   });
 }
 
 // ---------------------------------------------------------------------------
-// Prompts
+// Prompts (Marketplace)
 // ---------------------------------------------------------------------------
 
 interface PromptsParams {
@@ -128,12 +130,12 @@ export function usePrompts(params: PromptsParams = {}) {
 
   return useQuery<PaginatedResponse<Prompt>>({
     queryKey: ["prompts", query],
-    queryFn: () => api.get<PaginatedResponse<Prompt>>(`/prompts?${query}`),
+    queryFn: () => api.get<PaginatedResponse<Prompt>>(`/marketplace/prompts?${query}`),
   });
 }
 
 // ---------------------------------------------------------------------------
-// News
+// News (Learn)
 // ---------------------------------------------------------------------------
 
 interface NewsParams {
@@ -154,5 +156,165 @@ export function useNews(params: NewsParams = {}) {
   return useQuery<PaginatedResponse<NewsItem>>({
     queryKey: ["news", query],
     queryFn: () => api.get<PaginatedResponse<NewsItem>>(`/news?${query}`),
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Learning Paths (Learn)
+// ---------------------------------------------------------------------------
+
+export function useLearningPaths() {
+  return useQuery<PaginatedResponse<LearningPath>>({
+    queryKey: ["learning-paths"],
+    queryFn: () => api.get<PaginatedResponse<LearningPath>>("/learning-paths"),
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Community Contributions
+// ---------------------------------------------------------------------------
+
+interface ContributionsParams {
+  type?: string;
+  search?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+export function useContributions(params: ContributionsParams = {}) {
+  const query = new URLSearchParams({
+    page: String(params.page ?? 1),
+    page_size: String(params.pageSize ?? 10),
+    ...(params.type && { type: params.type }),
+    ...(params.search && { search: params.search }),
+  }).toString();
+
+  return useQuery<PaginatedResponse<CommunityContribution>>({
+    queryKey: ["contributions", query],
+    queryFn: () => api.get<PaginatedResponse<CommunityContribution>>(`/contributions?${query}`),
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Showcases (Community)
+// ---------------------------------------------------------------------------
+
+interface ShowcasesParams {
+  category?: string;
+  search?: string;
+  status?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+export function useShowcases(params: ShowcasesParams = {}) {
+  const query = new URLSearchParams({
+    page: String(params.page ?? 1),
+    page_size: String(params.pageSize ?? 10),
+    ...(params.category && { category: params.category }),
+    ...(params.search && { search: params.search }),
+    ...(params.status && { status: params.status }),
+  }).toString();
+
+  return useQuery<PaginatedResponse<Showcase>>({
+    queryKey: ["showcases", query],
+    queryFn: () => api.get<PaginatedResponse<Showcase>>(`/showcases?${query}`),
+  });
+}
+
+// ---------------------------------------------------------------------------
+// MCP Servers
+// ---------------------------------------------------------------------------
+
+export function useMcpServers() {
+  return useQuery<PaginatedResponse<McpServer>>({
+    queryKey: ["mcp-servers"],
+    queryFn: () => api.get<PaginatedResponse<McpServer>>("/mcp/servers"),
+  });
+}
+
+// ---------------------------------------------------------------------------
+// MCP Actions (mutations)
+// ---------------------------------------------------------------------------
+
+interface PostUsecasePayload {
+  title: string;
+  description: string;
+  category?: string;
+  tags?: string[];
+}
+
+export function usePostUsecase(onSuccess?: () => void) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: PostUsecasePayload) => api.post<{ ok: boolean; message: string; usecase: any }>("/mcp/actions/post-usecase", payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["showcases"] });
+      onSuccess?.();
+    },
+  });
+}
+
+interface PostSkillPayload {
+  title: string;
+  description: string;
+  category?: string;
+  level?: string;
+  tags?: string[];
+}
+
+export function usePostSkill(onSuccess?: () => void) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: PostSkillPayload) => api.post<{ ok: boolean; message: string; skill: any }>("/mcp/actions/post-skill", payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["skills"] });
+      onSuccess?.();
+    },
+  });
+}
+
+interface VotePayload {
+  target_id: string;
+  target_type: "skill" | "usecase";
+  current_votes: number;
+}
+
+export function useVote() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: VotePayload) => api.post<{ ok: boolean; message: string; target_id: string; target_type: string; new_vote_count: number }>("/mcp/actions/vote", payload),
+    onSuccess: (data, variables) => {
+      // Optimistic: update the cached count
+      if (variables.target_type === "skill") {
+        queryClient.setQueryData<any[]>(["skills"], (old: any[] = []) =>
+          old.map((s: any) => s.id === variables.target_id ? { ...s, votes: data.new_vote_count } : s)
+        );
+      } else if (variables.target_type === "usecase") {
+        queryClient.setQueryData<any[]>(["showcases"], (old: any[] = []) =>
+          old.map((s: any) => s.id === variables.target_id ? { ...s, votes: data.new_vote_count } : s)
+        );
+      }
+    },
+  });
+}
+
+export function useStartLearning() {
+  return useMutation({
+    mutationFn: (payload: { path_id: string; path_title: string }) =>
+      api.post<{ ok: boolean; message: string; enrollment: any }>("/mcp/actions/start-learning", payload),
+  });
+}
+
+interface GrabPayload {
+  item_id: string;
+  item_type: "skill" | "prompt";
+  item_title: string;
+}
+
+export function useGrab() {
+  return useMutation({
+    mutationFn: (payload: GrabPayload) =>
+      api.post<{ ok: boolean; message: string; grab: any }>("/mcp/actions/grab", payload),
   });
 }

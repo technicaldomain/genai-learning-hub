@@ -172,6 +172,62 @@ export interface CommunityContribution {
 export type ContributionType = "use-case" | "prompt" | "lesson-learned" | "tip";
 
 // ---------------------------------------------------------------------------
+// Showcase (Use Case Showcase)
+// ---------------------------------------------------------------------------
+
+export interface ShowcaseResource {
+  name: string;
+  url?: string;
+  type?: string;
+}
+
+export type ShowcaseCategory =
+  | "industry-solution"
+  | "internal-tool"
+  | "proof-of-concept"
+  | "experiment"
+  | "other";
+
+export interface Showcase {
+  id: string;
+  title: string;
+  description: string;
+  category?: ShowcaseCategory;
+  author: string;
+  authorDepartment?: string;
+  tags: string[];
+  resources: ShowcaseResource[];
+  status?: string;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+}
+
+// ---------------------------------------------------------------------------
+// MCP Server
+// ---------------------------------------------------------------------------
+
+export type McpTransport = "sse" | "stdio";
+
+export interface McpServerConfig {
+  command?: string;
+  args?: string[];
+  url?: string;
+  headers?: Record<string, string>;
+}
+
+export interface McpServer {
+  id: string;
+  name: string;
+  description: string;
+  transport: McpTransport;
+  config: McpServerConfig;
+  authRequired: boolean;
+  oidcScopes?: string[];
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+}
+
+// ---------------------------------------------------------------------------
 // API Response Wrappers
 // ---------------------------------------------------------------------------
 
