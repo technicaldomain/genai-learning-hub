@@ -87,7 +87,7 @@ export default function LoginPage() {
               You&apos;ll be redirected to your identity provider and returned here after authentication.
             </p>
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );
