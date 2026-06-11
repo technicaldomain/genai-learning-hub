@@ -22,11 +22,13 @@ async def get_mcp_authenticated_user(request: Request) -> User:
         base_url = str(request.base_url).rstrip("/")
         return_to = urllib.parse.quote(str(request.url), safe="")
         authorization_uri = f"{base_url}/api/auth/login?return_to={return_to}"
+        resource_path = request.url.path.lstrip("/")
+        resource_metadata = f"{base_url}/.well-known/oauth-protected-resource/{resource_path}"
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Not authenticated",
             headers={
-                "WWW-Authenticate": f'Bearer authorization_uri="{authorization_uri}"',
+                "WWW-Authenticate": f'Bearer resource_metadata="{resource_metadata}", authorization_uri="{authorization_uri}"',
             },
         )
 

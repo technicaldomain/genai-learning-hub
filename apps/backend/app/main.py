@@ -15,6 +15,7 @@ from app.routes.me import router as me_router
 from app.routes.contributions import router as contributions_router
 from app.routes.marketplace import router as marketplace_router
 from app.routes.news import router as news_router
+from app.routes.oauth import router as oauth_router
 from app.routes.showcases import router as showcases_router
 from app.routes.mcp import router as mcp_router
 
@@ -64,3 +65,4 @@ app.include_router(learning_paths_router, prefix="/api")
 app.include_router(showcases_router, prefix="/api")
 app.include_router(mcp_router, prefix="/api")
 app.include_router(news_router, prefix="/api")
+app.include_router(oauth_router)
