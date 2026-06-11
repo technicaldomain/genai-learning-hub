@@ -9,6 +9,7 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 # Copy workspace files
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 COPY nx.json ./
+COPY tsconfig.base.json ./
 
 # Copy all app and lib directories
 COPY apps/ ./apps/
@@ -18,7 +19,7 @@ COPY libs/ ./libs/
 RUN pnpm install --ignore-scripts
 
 # Build the frontend
-RUN pnpm --filter @genai-learning-hub/frontend build
+RUN npx nx build frontend
 
 # Stage 2: Serve with Nginx
 FROM nginx:alpine AS production
