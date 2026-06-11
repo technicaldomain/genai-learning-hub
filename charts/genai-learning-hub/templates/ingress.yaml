@@ -33,7 +33,7 @@ spec:
               service:
                 name: {{ include "common.fullname" $ }}-{{ .service }}
                 port:
-                  number: {{ if eq .service "backend" }}8000{{ else }}80{{ end }}
+                  number: {{ if eq .service "backend" }}8000{{ else }}8080{{ end }}
           {{- end }}
     {{- end }}
 {{- end }}
