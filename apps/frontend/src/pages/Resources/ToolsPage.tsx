@@ -26,8 +26,14 @@ export default function ToolsPage() {
 
   return (
     <Section>
-      <h1 className="text-3xl font-bold">Tools & APIs</h1>
-      <p className="text-neutral-600 dark:text-neutral-400">Approved AI tools, platforms, and APIs for organizational use.</p>
+      <div className="flex items-start gap-5">
+        <img src="/tools-n-apis.png" alt="" aria-hidden="true" className="h-16 w-16 shrink-0 rounded-2xl object-cover shadow-sm" />
+        <div>
+          <div className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-700 dark:text-amber-300">Marketplace</div>
+          <h1 className="mt-1 font-display text-3xl text-slate-950 dark:text-white">Tools & APIs</h1>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">Approved AI tools, platforms, and APIs for organizational use.</p>
+        </div>
+      </div>
 
       <div className="flex flex-wrap gap-3 items-center">
         <div className="relative flex-1 min-w-[220px]">

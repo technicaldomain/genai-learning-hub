@@ -9,6 +9,8 @@ from app.config import settings
 from app.auth.middleware import SessionMiddleware
 from app.routes.auth import router as auth_router
 from app.routes.health import router as health_router
+from app.routes.home import router as home_router
+from app.routes.learning_paths import router as learning_paths_router
 from app.routes.me import router as me_router
 from app.routes.contributions import router as contributions_router
 from app.routes.marketplace import router as marketplace_router
@@ -54,9 +56,11 @@ app.include_router(auth_router)
 
 # API routes (prefix /api)
 app.include_router(health_router, prefix="/api")
+app.include_router(home_router, prefix="/api")
 app.include_router(me_router, prefix="/api")
 app.include_router(marketplace_router, prefix="/api")
 app.include_router(contributions_router, prefix="/api")
+app.include_router(learning_paths_router, prefix="/api")
 app.include_router(showcases_router, prefix="/api")
 app.include_router(mcp_router, prefix="/api")
 app.include_router(news_router, prefix="/api")

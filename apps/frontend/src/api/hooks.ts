@@ -5,6 +5,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "./client";
 import type {
+  HomeContent,
   Skill,
   Resource,
   Prompt,
@@ -48,6 +49,13 @@ export function useCurrentUser() {
     queryKey: ["user", "me"],
     queryFn: () => api.get<User>("/me"),
     staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useHomeContent() {
+  return useQuery<HomeContent>({
+    queryKey: ["home-content"],
+    queryFn: () => api.get<HomeContent>("/home"),
   });
 }
 

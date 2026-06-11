@@ -38,7 +38,10 @@ function getInitialMode(): ThemeMode {
 }
 
 function applyTheme(mode: ThemeMode) {
-  const isDark = mode === "dark" || (mode === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  const prefersDark = typeof window !== "undefined" && typeof window.matchMedia === "function"
+    ? window.matchMedia("(prefers-color-scheme: dark)").matches
+    : false;
+  const isDark = mode === "dark" || (mode === "system" && prefersDark);
   document.documentElement.classList.remove("dark");
   if (isDark) {
     document.documentElement.classList.add("dark");

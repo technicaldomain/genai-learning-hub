@@ -129,6 +129,93 @@ export interface NewsItem {
 }
 
 // ---------------------------------------------------------------------------
+// Home Content
+// ---------------------------------------------------------------------------
+
+export interface HomeContent {
+  hero: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    freshness: string;
+    primaryAction: { label: string; path: string };
+    secondaryAction: { label: string; path: string };
+  };
+  startHere: {
+    title: string;
+    description: string;
+    steps: Array<{
+      title: string;
+      description: string;
+      path: string;
+      effort: string;
+    }>;
+  };
+  promptLibrary: {
+    title: string;
+    description: string;
+    featured: Array<{
+      id: string;
+      title: string;
+      description: string;
+      category: PromptCategory;
+      rating?: number;
+      usageCount?: number;
+      tags: string[];
+      path: string;
+    }>;
+  };
+  learningPaths: {
+    title: string;
+    description: string;
+    items: Array<{
+      id: string;
+      title: string;
+      description: string;
+      level: SkillLevel;
+      estimatedHours: number;
+      moduleCount: number;
+      path: string;
+      tags: string[];
+    }>;
+  };
+  showcase: {
+    title: string;
+    description: string;
+    items: Array<{
+      id: string;
+      title: string;
+      description: string;
+      author: string;
+      authorDepartment?: string;
+      tags: string[];
+      status: string;
+      path: string;
+    }>;
+  };
+  whatsNew: {
+    title: string;
+    description: string;
+    items: Array<{
+      id: string;
+      title: string;
+      summary: string;
+      source: string;
+      publishedAt: string;
+      freshnessLabel: string;
+      featured?: boolean;
+      tags: string[];
+      path?: string;
+    }>;
+  };
+  stats: Array<{
+    label: string;
+    value: string;
+    detail: string;
+  }>;
+}
+
+// ---------------------------------------------------------------------------
 // Learning Path
 // ---------------------------------------------------------------------------
 

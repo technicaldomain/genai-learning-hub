@@ -27,6 +27,7 @@ import {
   LogOutIcon,
   ChevronDownIcon,
   LockIcon,
+  CompassIcon,
 } from "lucide-react";
 
 const DRAWER_WIDTH = 260;
@@ -39,12 +40,12 @@ type NavGroup = {
 
 const navGroups: NavGroup[] = [
   {
-    label: "Marketplace",
-    icon: <WrenchIcon className="h-4 w-4" />,
+    label: "Trailhead",
+    icon: <CompassIcon className="h-4 w-4" />,
     items: [
-      { label: "Skills & Automations", path: "/marketplace/skills", icon: <WrenchIcon className="h-4 w-4" /> },
-      { label: "Prompt Templates", path: "/marketplace/prompts", icon: <TextQuoteIcon className="h-4 w-4" /> },
-      { label: "Approved Tools & APIs", path: "/marketplace/tools", icon: <PuzzleIcon className="h-4 w-4" /> },
+      { label: "Home", path: "/", icon: <HomeIcon className="h-4 w-4" /> },
+      { label: "Prompt Library", path: "/marketplace/prompts", icon: <TextQuoteIcon className="h-4 w-4" /> },
+      { label: "Approved Tools", path: "/marketplace/tools", icon: <PuzzleIcon className="h-4 w-4" /> },
     ],
   },
   {
@@ -68,11 +69,14 @@ const navGroups: NavGroup[] = [
 
 function Sidebar({ onClose }: { onClose?: () => void }) {
   return (
-    <aside className="h-full flex flex-col bg-white dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-800">
-      <nav className="flex-1 py-2 px-3 space-y-4 overflow-y-auto">
+    <aside className="flex h-full flex-col border-r border-slate-200/80 bg-slate-950 text-white dark:border-slate-800">
+      <div className="border-b border-white/10 px-5 py-5">
+        <div className="text-xs font-semibold uppercase tracking-[0.26em] text-amber-200">GenAI Learning Hub</div>
+      </div>
+      <nav className="flex-1 space-y-4 overflow-y-auto px-3 py-4">
         {navGroups.map((group) => (
           <div key={group.label}>
-            <div className="px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+            <div className="px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
               {group.label}
             </div>
             <div className="space-y-0.5">
@@ -83,8 +87,8 @@ function Sidebar({ onClose }: { onClose?: () => void }) {
           </div>
         ))}
       </nav>
-      <div className="p-4 text-center">
-        <span className="text-xs text-neutral-500 dark:text-neutral-400">
+      <div className="border-t border-white/10 p-4 text-center">
+        <span className="text-xs text-slate-400">
           GenAI Learning Hub v0.1.0
         </span>
       </div>
@@ -103,8 +107,8 @@ function SidebarLink({ label, path, icon, onClose }: NavItem & { onClose?: () =>
       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
         ${
           active
-            ? "bg-primary-500 text-white dark:text-white"
-            : "text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+            ? "bg-amber-400 text-slate-950"
+            : "text-slate-300 hover:bg-white/8 hover:text-white"
         }`}
     >
       {icon}
@@ -172,7 +176,7 @@ function UserMenu() {
     return (
       <button
         onClick={handleLogin}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+        className="flex items-center gap-2 rounded-full border border-slate-200/80 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-white/10 dark:text-slate-200 dark:hover:bg-white/10"
         title="Sign in"
       >
         <UserCircleIcon className="h-5 w-5" />
@@ -194,32 +198,32 @@ function UserMenu() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setDropdownOpen(!dropdownOpen)}
-        className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+        className="flex items-center gap-2 rounded-full border border-slate-200/80 px-2 py-1.5 transition-colors hover:bg-slate-100 dark:border-white/10 dark:hover:bg-white/10"
         aria-label="User menu"
       >
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-500 text-white text-sm font-medium">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-400 text-sm font-medium text-slate-950">
           {initials}
         </div>
-        <span className="hidden sm:block text-sm font-medium text-neutral-700 dark:text-neutral-300 max-w-32 truncate">
+        <span className="hidden max-w-32 truncate text-sm font-medium text-slate-700 dark:text-slate-100 sm:block">
           {displayName}
         </span>
-        <ChevronDownIcon className={`h-4 w-4 text-neutral-500 transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
+        <ChevronDownIcon className={`h-4 w-4 text-slate-500 transition-transform dark:text-slate-400 ${dropdownOpen ? "rotate-180" : ""}`} />
       </button>
 
       {/* Dropdown */}
       {dropdownOpen && (
-        <div className="absolute right-0 mt-2 w-56 rounded-lg bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-lg py-1 z-50">
-          <div className="px-4 py-3 border-b border-neutral-200 dark:border-neutral-800">
-            <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">
+        <div className="absolute right-0 z-50 mt-2 w-56 rounded-2xl border border-slate-200/80 bg-white py-1 shadow-[0_18px_50px_rgba(15,23,42,0.2)] dark:border-slate-800 dark:bg-slate-950">
+          <div className="border-b border-slate-200/80 px-4 py-3 dark:border-slate-800">
+            <p className="truncate text-sm font-medium text-slate-950 dark:text-white">
               {displayName}
             </p>
             {user.email && (
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
+              <p className="mt-0.5 truncate text-xs text-slate-500 dark:text-slate-400">
                 {user.email}
               </p>
             )}
             {user.department && (
-              <p className="text-xs text-neutral-400 dark:text-neutral-500 mt-0.5">
+              <p className="mt-0.5 text-xs text-slate-400 dark:text-slate-500">
                 {user.department}
               </p>
             )}
@@ -227,7 +231,7 @@ function UserMenu() {
           <div className="py-1">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+              className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/30"
             >
               <LogOutIcon className="h-4 w-4" />
               <span>Sign out</span>
@@ -275,27 +279,28 @@ export default function MainLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100">
+    <div className="min-h-screen flex flex-col bg-[radial-gradient(circle_at_top,_rgba(251,191,36,0.08),_transparent_26%),linear-gradient(180deg,_#f8fafc_0%,_#eef2ff_100%)] text-slate-950 dark:bg-[radial-gradient(circle_at_top,_rgba(251,191,36,0.08),_transparent_26%),linear-gradient(180deg,_#020617_0%,_#0f172a_100%)] dark:text-slate-100">
       {/* ── Header ─────────────────────────────────────────── */}
-      <header className="fixed top-0 inset-x-0 z-40 h-14 flex items-center px-4 bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800">
+      <header className="fixed inset-x-0 top-0 z-40 flex h-16 items-center border-b border-slate-200/70 bg-white/80 px-4 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80">
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800"
+          className="-ml-2 rounded-lg p-2 hover:bg-slate-100 dark:hover:bg-slate-800 lg:hidden"
         >
           <MenuIcon className="h-5 w-5" />
         </button>
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="hidden lg:flex p-2 -ml-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800"
+          className="-ml-2 hidden rounded-lg p-2 hover:bg-slate-100 dark:hover:bg-slate-800 lg:flex"
         >
           <MenuIcon className="h-5 w-5" />
         </button>
-        <span className="flex-1 ml-2 text-lg font-bold text-primary-500">
-          GenAI Learning Hub
-        </span>
+        <div className="ml-2 flex-1">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.26em] text-amber-700 dark:text-amber-200">GenAI Learning Hub</div>
+          <div className="font-display text-lg text-slate-950 dark:text-white">Trailhead</div>
+        </div>
         <button
           onClick={cycleTheme}
-          className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+          className="rounded-lg p-2 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
           aria-label="Toggle theme"
           title={
             resolvedMode === "system"
@@ -313,7 +318,7 @@ export default function MainLayout() {
             <MonitorIcon className="h-5 w-5" />
           )}
         </button>
-        <div className="pl-2 border-l border-neutral-200 dark:border-neutral-800">
+        <div className="border-l border-slate-200/70 pl-2 dark:border-slate-800">
           <UserMenu />
         </div>
       </header>
@@ -321,7 +326,7 @@ export default function MainLayout() {
       {/* ── Mobile sidebar overlay ──────────────────────────── */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="fixed inset-0 bg-black/40" onClick={() => setMobileMenuOpen(false)} />
+          <div className="fixed inset-0 bg-slate-950/60" onClick={() => setMobileMenuOpen(false)} />
           <div
             className="absolute inset-y-0 left-0 w-64"
             onClick={(e) => e.stopPropagation()}
@@ -335,14 +340,14 @@ export default function MainLayout() {
       <div className="flex flex-1 pt-14">
         {/* Desktop sidebar */}
         <div
-          className="hidden lg:block sticky top-14 h-[calc(100vh-3.5rem)]"
+          className="hidden sticky top-16 h-[calc(100vh-4rem)] shrink-0 lg:block"
           style={{ width: DRAWER_WIDTH }}
         >
           <Sidebar />
         </div>
 
         {/* Main content */}
-        <main className="flex-1 p-4 sm:p-6 md:p-8 lg:p-10 max-w-7xl w-full mx-auto">
+        <main className="mx-auto w-full max-w-7xl min-w-0 flex-1 p-4 sm:p-6 md:p-8 lg:p-10">
           <Outlet />
         </main>
       </div>
