@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy project
-COPY apps/backend/pyproject.toml apps/backend/uv.lock* apps/backend/README.md ./
+COPY apps/backend/pyproject.toml apps/backend/uv.lock* ./
 
 # Install Python dependencies
 RUN pip install --no-cache-dir --upgrade pip && \
