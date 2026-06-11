@@ -116,9 +116,9 @@ async def callback(
     request.state._session_action = "set"
     request.state._session_value = user_info
 
-    # Redirect to frontend auth callback page
-    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:4200")
-    return RedirectResponse(f"{frontend_url}/auth/callback", status_code=302)
+    # Redirect to the frontend after the session cookie is set.
+    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:4200").rstrip("/")
+    return RedirectResponse(frontend_url, status_code=302)
 
 
 # ---------------------------------------------------------------------------
