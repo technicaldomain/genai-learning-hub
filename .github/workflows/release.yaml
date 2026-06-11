@@ -95,6 +95,7 @@ jobs:
           VERSION="${{ needs.release.outputs.tag }}"
           sed -i "s/^version:.*/version: ${VERSION}/" charts/genai-learning-hub/Chart.yaml
           sed -i "s/^appVersion:.*/appVersion: \"${VERSION}\"/" charts/genai-learning-hub/Chart.yaml
+          helm dependency build charts/genai-learning-hub
           helm package charts/genai-learning-hub --version "${VERSION}" --app-version "${VERSION}"
 
       - name: Push chart
