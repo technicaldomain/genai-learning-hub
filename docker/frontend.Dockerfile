@@ -24,12 +24,12 @@ RUN npx nx build frontend
 # Stage 2: Serve with Nginx
 FROM nginx:alpine AS production
 
-# Copy custom nginx config
-COPY docker/frontend.nginx.conf /etc/nginx/conf.d/default.conf
+# Copy custom nginx config template (rendered by /docker-entrypoint.d/20-envsubst-on-templates.sh)
+COPY docker/frontend.nginx.conf /etc/nginx/templates/default.conf.template
 
 # Copy built files
 COPY --from=builder /app/dist/apps/frontend /usr/share/nginx/html
 
-EXPOSE 80
+EXPOSE 8080
 
 CMD ["nginx", "-g", "daemon off;"]

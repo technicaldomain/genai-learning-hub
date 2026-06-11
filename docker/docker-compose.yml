@@ -9,7 +9,7 @@ services:
       context: ..
       dockerfile: docker/frontend.Dockerfile
     ports:
-      - "80:80"
+      - "8080:8080"
     depends_on:
       - backend
     restart: unless-stopped
@@ -27,5 +27,5 @@ services:
       - APP_NAME=GenAI Learning Hub
       - DEBUG=false
       - JWT_SECRET=change-me-in-production
-      - CORS_ORIGINS=http://localhost
+      - CORS_ORIGINS=http://localhost:8080
     restart: unless-stopped
