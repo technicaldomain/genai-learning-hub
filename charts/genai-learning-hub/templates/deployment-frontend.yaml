@@ -37,12 +37,26 @@ spec:
       {{- $res := default (dict) ($f.resources | default (dict)) }}
       {{- $rr := default (dict) ($res.requests | default (dict)) }}
       {{- $rl := default (dict) ($res.limits | default (dict)) }}
+      volumes:
+        - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-run
+          emptyDir: {}
+        - name: nginx-tmp
+          emptyDir: {}
       containers:
         - name: app
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
+          volumeMounts:
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
+            - name: nginx-run
+              mountPath: /var/run
+            - name: nginx-tmp
+              mountPath: /tmp
           image: "{{ default "ghcr.io" .Values.image.registry }}/{{ $f.image.repository }}:{{ default .Chart.AppVersion $f.image.tag }}"
           imagePullPolicy: {{ default "IfNotPresent" .Values.image.pullPolicy }}
           livenessProbe:

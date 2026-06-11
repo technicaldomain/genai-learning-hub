@@ -73,6 +73,20 @@ frontend:
   image:
     repository: technicaldomain/genai-learning-hub-frontend
     tag: ""  # defaults to appVersion
+  healthCheck:
+    enabled: true
+    liveness:
+      path: /health
+      initialDelaySeconds: 15
+      periodSeconds: 20
+      timeoutSeconds: 3
+      failureThreshold: 3
+    readiness:
+      path: /health
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 3
+      failureThreshold: 3
   serviceAccount:
     create: false
     name: ""

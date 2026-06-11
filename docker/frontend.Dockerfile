@@ -22,14 +22,16 @@ RUN pnpm install --ignore-scripts
 RUN npx nx build frontend
 
 # Stage 2: Serve with Nginx
-FROM nginx:alpine AS production
+FROM nginxinc/nginx-unprivileged:alpine AS production
 
-# Copy custom nginx config template (rendered by /docker-entrypoint.d/20-envsubst-on-templates.sh)
-COPY docker/frontend.nginx.conf /etc/nginx/templates/default.conf.template
+# Use a full nginx.conf tuned for non-root runtime.
+COPY docker/frontend.nginx.conf /etc/nginx/nginx.conf
 
 # Copy built files
-COPY --from=builder /app/dist/apps/frontend /usr/share/nginx/html
+COPY --from=builder --chown=nginx:nginx /app/dist/apps/frontend /usr/share/nginx/html
 
 EXPOSE 8080
+
+USER nginx
 
 CMD ["nginx", "-g", "daemon off;"]
