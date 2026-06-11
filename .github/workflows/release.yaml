@@ -12,40 +12,27 @@ permissions:
   id-token: write
 
 jobs:
-  semantic-release:
-    name: Semantic Release
+  release:
+    name: Release
     runs-on: ubuntu-latest
     outputs:
-      release_version: ${{ steps.semantic-release.outputs.release_version }}
+      tag: ${{ steps.semver.outputs.new_release_version }}
+      published: ${{ steps.semver.outputs.new_release_published }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
         with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v5
-        with:
-          version: 10
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+          persist-credentials: false
 
       - name: Semantic Release
-        id: semantic-release
+        id: semver
+        uses: cycjimmy/semantic-release-action@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
 
   build-and-push:
     name: Build and Push Docker Images
-    needs: semantic-release
-    if: ${{ needs.semantic-release.outputs.release_version != '' || github.event_name == 'workflow_dispatch' }}
+    needs: release
+    if: needs.release.outputs.published == 'true'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -97,59 +84,33 @@ jobs:
           push: true
           tags: |
             ${{ matrix.image }}:latest
-            ${{ matrix.image }}:${{ needs.semantic-release.outputs.release_version }}
+            ${{ matrix.image }}:${{ needs.release.outputs.tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Sign ${{ matrix.name }} image
-        uses: sigstore/cosign-installer@v4.1.2
-        with:
-          cosign-release: "v2.4.0"
-
-      - name: Sign images with GitHub OIDC
-        run: |
-          cosign sign --yes ${{ matrix.image }}:${{ needs.semantic-release.outputs.release_version }}
-          cosign sign --yes ${{ matrix.image }}:latest
-
   release-helm:
     name: Release Helm Chart
-    needs: semantic-release
-    if: ${{ needs.semantic-release.outputs.release_version != '' || github.event_name == 'workflow_dispatch' }}
+    needs: release
+    if: needs.release.outputs.published == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
       - name: Install Helm
-        uses: azure/setup-helm@v4
-        with:
-          version: v3.16.0
+        uses: azure/setup-helm@v5
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Helm dependency update
-        working-directory: helm
-        run: helm dependency update .
+      - name: Login to GHCR OCI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Package chart
-        working-directory: helm
-        run: helm package . --destination /tmp/release-packages/
-
-      - name: Push chart to OCI
-        working-directory: /tmp/release-packages
         run: |
-          helm push genai-learning-hub-${{ needs.semantic-release.outputs.release_version }}.tgz oci://ghcr.io/technicaldomain/helm
+          VERSION="${{ needs.release.outputs.tag }}"
+          sed -i "s/^version:.*/version: ${VERSION}/" charts/genai-learning-hub/Chart.yaml
+          sed -i "s/^appVersion:.*/appVersion: \"${VERSION}\"/" charts/genai-learning-hub/Chart.yaml
+          helm package charts/genai-learning-hub --version "${VERSION}" --app-version "${VERSION}"
 
-      - name: Sign chart with cosign
-        uses: sigstore/cosign-installer@v4.1.2
-        with:
-          cosign-release: "v2.4.0"
-
-      - name: Sign chart with GitHub OIDC
+      - name: Push chart
         run: |
-          cosign sign --yes ghcr.io/technicaldomain/helm/genai-learning-hub:${{ needs.semantic-release.outputs.release_version }}
+          VERSION="${{ needs.release.outputs.tag }}"
+          helm push genai-learning-hub-${VERSION}.tgz oci://ghcr.io/${{ github.repository_owner }}/charts

@@ -1,5 +1,5 @@
 # Stage 1: Build wheels and collect dependencies
-FROM python:3.12-slim AS builder
+FROM python:3.14-slim AS builder
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir --prefix="/install" -e .
 
 # Stage 2: Production
-FROM python:3.12-slim AS production
+FROM python:3.14-slim AS production
 
 WORKDIR /app
 
@@ -28,7 +28,7 @@ COPY --from=builder /install /install
 
 # Set Python path for installed packages
 ENV PATH=/install/bin:$PATH \
-    PYTHONPATH=/install/lib/python3.12/site-packages
+    PYTHONPATH=/install/lib/python3.14/site-packages
 
 # Copy application code
 COPY apps/backend/app ./app
@@ -37,10 +37,6 @@ COPY apps/backend/app ./app
 RUN chown -R appuser:appuser /app
 
 USER appuser
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')" || exit 1
 
 EXPOSE 8000
 

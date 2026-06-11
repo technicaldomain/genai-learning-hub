@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:22-bookworm-slim AS builder
+FROM node:24-bookworm-slim AS builder
 
 WORKDIR /app
 
@@ -15,9 +15,7 @@ COPY apps/ ./apps/
 COPY libs/ ./libs/
 
 # Install dependencies
-# Set PNPM_MINIMUM_RELEASE_AGE=0 to bypass supply-chain policy check
-ENV PNPM_MINIMUM_RELEASE_AGE=0
-RUN pnpm install --no-frozen-lockfile --ignore-scripts
+RUN pnpm install --ignore-scripts
 
 # Build the frontend
 RUN pnpm --filter @genai-learning-hub/frontend build
@@ -30,10 +28,6 @@ COPY docker/frontend.nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy built files
 COPY --from=builder /app/dist/apps/frontend /usr/share/nginx/html
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:80/ || exit 1
 
 EXPOSE 80
 
