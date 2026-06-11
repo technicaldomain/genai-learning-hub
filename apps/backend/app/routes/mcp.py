@@ -10,6 +10,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 
 from app.auth.dependencies import get_current_user
 from app.models import McpServer, McpTransport, PaginatedResponse, User
+from app.utils.request_url import get_external_base_url, get_external_request_url
 
 router = APIRouter()
 
@@ -19,8 +20,8 @@ async def get_mcp_authenticated_user(request: Request) -> User:
     try:
         return await get_current_user(request)
     except HTTPException:
-        base_url = str(request.base_url).rstrip("/")
-        return_to = urllib.parse.quote(str(request.url), safe="")
+        base_url = get_external_base_url(request)
+        return_to = urllib.parse.quote(get_external_request_url(request), safe="")
         authorization_uri = f"{base_url}/api/auth/login?return_to={return_to}"
         resource_path = request.url.path.lstrip("/")
         resource_metadata = f"{base_url}/.well-known/oauth-protected-resource/{resource_path}"
@@ -134,7 +135,7 @@ async def list_mcp_servers(
     user: User = Depends(get_mcp_authenticated_user),
 ):
     """List available MCP servers. Returns connection info and auth requirements."""
-    base_url = str(request.base_url).rstrip("/")
+    base_url = get_external_base_url(request)
     resolved_servers = [
         server.model_copy(
             update={
@@ -162,7 +163,7 @@ async def get_mcp_server(
     user: User = Depends(get_mcp_authenticated_user),
 ):
     """Get a single MCP server configuration by ID."""
-    base_url = str(request.base_url).rstrip("/")
+    base_url = get_external_base_url(request)
     for server in _MCP_SERVERS:
         if server.id == server_id:
             return server.model_copy(

@@ -7,12 +7,13 @@ from typing import Any
 from fastapi import APIRouter, Request
 
 from app.auth.config import settings as oidc_settings
+from app.utils.request_url import get_external_base_url
 
 router = APIRouter(tags=["oauth"])
 
 
 def _resolve_base_url(request: Request) -> str:
-    return str(request.base_url).rstrip("/")
+    return get_external_base_url(request)
 
 
 def _collect_resource_scopes() -> list[str]:
