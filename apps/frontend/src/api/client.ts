@@ -4,7 +4,7 @@
  * On 401, redirects to /auth/login (frontend login page).
  */
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+import { getApiBaseUrl } from "../runtime-config";
 
 interface FetchOptions extends RequestInit {
   auth?: boolean;
@@ -15,12 +15,11 @@ async function fetchApi<T>(
   options: FetchOptions = {}
 ): Promise<T> {
   const { auth = false, ...rest } = options;
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-    ...rest.headers,
-  };
+  const headers = new Headers(rest.headers);
+  headers.set("Content-Type", "application/json");
+  const baseUrl = getApiBaseUrl();
 
-  const response = await fetch(`${BASE_URL}${path}`, {
+  const response = await fetch(`${baseUrl}${path}`, {
     ...rest,
     credentials: "include",
     headers,

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.fullname" . }}-frontend-config
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: frontend
+data:
+  config.json: |
+    {{- $frontend := default (dict) .Values.frontend }}
+    {{- $config := default (dict) ($frontend.config | default (dict)) }}
+    {{- $data := default (dict) ($config.data | default (dict)) }}
+    {{- $apiBaseUrl := default "/api" $data.API_BASE_URL }}
+    {{- dict "apiBaseUrl" $apiBaseUrl | toJson | nindent 4 }}

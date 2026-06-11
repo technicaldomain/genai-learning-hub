@@ -21,10 +21,13 @@ backend:
   # Backend-specific config (rendered into ConfigMap as env vars)
   config:
     data:
+      API_BASE_URL: "/api"
       APP_NAME: "GenAI Learning Hub"
       DEBUG: "false"
       JWT_SECRET: "change-me-in-production"
-      CORS_ORIGINS: "http://localhost"
+      OIDC_REDIRECT_URI: "https://genai-learning-hub.technicaldomain.xyz/api/auth/callback"
+      FRONTEND_URL: "https://genai-learning-hub.technicaldomain.xyz"
+      CORS_ORIGINS: "https://genai-learning-hub.technicaldomain.xyz"
       BACKEND_HOST: "0.0.0.0"
       BACKEND_PORT: "8000"
   secrets:

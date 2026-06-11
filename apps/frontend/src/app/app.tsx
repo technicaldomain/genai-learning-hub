@@ -24,6 +24,7 @@ import ShowcasePage from "../pages/Community/ShowcasePage";
 import McpConnectPage from "../pages/Community/McpConnectPage";
 import LoginPage from "../pages/Auth/LoginPage";
 import CallbackPage from "../pages/Auth/CallbackPage";
+import { getApiBaseUrl } from "../runtime-config";
 
 const THEME_KEY = "genai-hub-theme-mode";
 export type ThemeMode = "light" | "dark" | "system";
@@ -58,8 +59,6 @@ const queryClient = new QueryClient({
 // Auth guard — shows loader while checking, blocks render if not authenticated
 // ---------------------------------------------------------------------------
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
-
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const [authState, setAuthState] = React.useState<{
     isLoading: boolean;
@@ -78,7 +77,7 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
 
     async function check() {
       try {
-        const res = await fetch(`${API_BASE}/me`, { credentials: "include" });
+        const res = await fetch(`${getApiBaseUrl()}/me`, { credentials: "include" });
         if (!cancelled && version === checkVersion.current) {
           if (!res.ok) {
             const isLogin = location.pathname === "/login";
@@ -104,7 +103,7 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
     check();
 
     return () => { cancelled = true; };
-  }, [navigate, location, API_BASE]);
+  }, [navigate, location]);
 
   const { isAuthenticated, isLoading } = authState;
 

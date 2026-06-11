@@ -5,8 +5,7 @@
 
 import * as React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+import { getApiBaseUrl } from "../runtime-config";
 
 export function useAuthCheck() {
   const [status, setStatus] = React.useState<{
@@ -28,7 +27,7 @@ export function useAuthCheck() {
 
     async function check() {
       try {
-        const res = await fetch(`${API_BASE}/me`, { credentials: "include" });
+        const res = await fetch(`${getApiBaseUrl()}/me`, { credentials: "include" });
         if (!cancelled) {
           if (!res.ok) {
             // Not authenticated — redirect to login unless already on login page
