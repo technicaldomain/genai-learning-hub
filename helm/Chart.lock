@@ -1,6 +1,0 @@
-dependencies:
-- name: common
-  repository: oci://ghcr.io/technicaldomain/helm
-  version: 2.2.0
-digest: sha256:8f5cab635f3e0e9b11b077578ea939573f61b6f76004bdbcc899a622ee21b520
-generated: "2026-06-10T14:53:26.517071-04:00"
