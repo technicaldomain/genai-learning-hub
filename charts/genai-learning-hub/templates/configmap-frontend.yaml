@@ -11,4 +11,5 @@ data:
     {{- $config := default (dict) ($frontend.config | default (dict)) }}
     {{- $data := default (dict) ($config.data | default (dict)) }}
     {{- $apiBaseUrl := default "/api" $data.API_BASE_URL }}
-    {{- dict "apiBaseUrl" $apiBaseUrl | toJson | nindent 4 }}
+    {{- $mcpBaseUrl := default "/mcp" $data.MCP_BASE_URL }}
+    {{- dict "apiBaseUrl" $apiBaseUrl "mcpBaseUrl" $mcpBaseUrl | toJson | nindent 4 }}

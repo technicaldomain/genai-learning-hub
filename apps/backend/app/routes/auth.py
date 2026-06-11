@@ -22,7 +22,7 @@ router = APIRouter(prefix="/api/auth", tags=["auth"])
 
 
 @router.get("/login")
-async def login(request: Request):
+async def login(request: Request, return_to: Optional[str] = None):
     """Initiate OIDC login — redirects to the provider's authorize endpoint."""
     if not oidc_settings.is_configured:
         raise HTTPException(
@@ -38,7 +38,21 @@ async def login(request: Request):
         os.getenv("JWT_SECRET", "change-me-in-production"),
         salt="genai-oauth-state",
     )
-    signed = s.dumps({"state": state})
+    # Preserve optional post-login destination for clients such as MCP auth flows.
+    safe_return_to = None
+    if return_to:
+        parsed_return_to = urllib.parse.urlparse(return_to)
+        parsed_base = urllib.parse.urlparse(str(request.base_url))
+
+        if not parsed_return_to.scheme and return_to.startswith("/"):
+            safe_return_to = return_to
+        elif (
+            parsed_return_to.scheme == parsed_base.scheme
+            and parsed_return_to.netloc == parsed_base.netloc
+        ):
+            safe_return_to = return_to
+
+    signed = s.dumps({"state": state, "return_to": safe_return_to})
 
     resp = RedirectResponse(
         __build_authorize_url(
@@ -94,6 +108,7 @@ async def callback(
         data = s.loads(signed_state)  # type: ignore[arg-type]
         print(f"[DEBUG] loaded data: {data}")
         stored_state = data.get("state")
+        return_to = data.get("return_to")
         print(f"[DEBUG] stored_state: {stored_state}, callback state: {state}")
     except Exception as e:
         print(f"[DEBUG] loads error: {e}")
@@ -115,6 +130,10 @@ async def callback(
     # Set session cookie
     request.state._session_action = "set"
     request.state._session_value = user_info
+
+    # Redirect back to caller if provided (for MCP auth flows), else to frontend app.
+    if return_to:
+        return RedirectResponse(return_to, status_code=302)
 
     # Redirect to the frontend after the session cookie is set.
     frontend_url = os.getenv("FRONTEND_URL", "http://localhost:4200").rstrip("/")

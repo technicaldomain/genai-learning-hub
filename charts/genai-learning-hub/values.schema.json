@@ -133,6 +133,22 @@
           },
           "additionalProperties": false
         },
+        "config": {
+          "type": "object",
+          "description": "Runtime configuration rendered into frontend config.json",
+          "properties": {
+            "data": {
+              "type": "object",
+              "properties": {
+                "API_BASE_URL": { "type": "string", "default": "/api" },
+                "MCP_BASE_URL": { "type": "string", "default": "/mcp" }
+              },
+              "patternProperties": { "^.*$": { "type": ["string", "boolean", "number", "array", "object", "null"] } },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
         "healthCheck": {
           "type": "object",
           "properties": {

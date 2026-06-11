@@ -5,10 +5,12 @@
 import * as React from "react";
 import { useMcpServers } from "../../api/hooks";
 import { ServerIcon, TerminalIcon, ShieldIcon, CopyIcon } from "lucide-react";
+import { getMcpBaseUrl } from "../../runtime-config";
 
 export default function McpConnectPage() {
   const { data, isLoading, error } = useMcpServers();
   const [copied, setCopied] = React.useState("");
+  const mcpBaseUrl = getMcpBaseUrl();
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -41,8 +43,38 @@ export default function McpConnectPage() {
 
   const servers = data?.data ?? [];
 
-  const communityToolsServer = servers.find((s: any) => s.id === "community-tools");
-  const otherServers = servers.filter((s: any) => s.id !== "community-tools");
+  const browserOrigin = typeof window !== "undefined" ? window.location.origin : "";
+
+  const resolveEndpointUrl = (rawUrl: string | undefined, serverId: string): string => {
+    const fallbackPath = `${mcpBaseUrl}/${serverId}/sse`;
+
+    if (!rawUrl) {
+      return `${browserOrigin}${fallbackPath}`;
+    }
+
+    try {
+      const parsed = new URL(rawUrl);
+      if (parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1") {
+        return `${browserOrigin}${parsed.pathname}`;
+      }
+      return parsed.toString();
+    } catch {
+      if (rawUrl.startsWith("/")) {
+        return `${browserOrigin}${rawUrl}`;
+      }
+      return `${browserOrigin}/${rawUrl.replace(/^\/+/, "")}`;
+    }
+  };
+
+  const resolvedServers = servers.map((server: any) => ({
+    ...server,
+    resolvedUrl: resolveEndpointUrl(server?.config?.url, server.id),
+  }));
+
+  const communityToolsServer = resolvedServers.find((s: any) => s.id === "community-tools");
+  const otherServers = resolvedServers.filter((s: any) => s.id !== "community-tools");
+  const communityToolsUrl = communityToolsServer?.resolvedUrl || `${browserOrigin}${mcpBaseUrl}/community-tools/sse`;
+  const curlCommand = `# Authenticate and get a token first (OIDC flow)\n# Then call the MCP server:\n\ncurl -X POST ${communityToolsUrl} \\\n+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \\\n+  -H "Content-Type: application/json" \\\n+  -d '{"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "post_usecase", "arguments": {"title": "My Use Case", "description": "Description", "tags": ["ai", "demo"]}}, "id": 1}'`;
 
   return (
     <div className="flex flex-col gap-8">
@@ -107,10 +139,10 @@ export default function McpConnectPage() {
             <h3 className="text-xs font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-2">Connection</h3>
             <div className="flex items-center gap-2">
               <code className="flex-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 px-3 py-2 text-sm font-mono text-neutral-700 dark:text-neutral-300 truncate">
-                {communityToolsServer.config.url}
+                {communityToolsUrl}
               </code>
               <button
-                onClick={() => copyToClipboard(communityToolsServer.config.url, "url")}
+                onClick={() => copyToClipboard(communityToolsUrl, "url")}
                 className="p-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
                 title="Copy endpoint URL"
               >
@@ -187,7 +219,7 @@ export default function McpConnectPage() {
                     )}
                   </div>
                   <button
-                    onClick={() => copyToClipboard(server.config.url, `url-${server.id}`)}
+                    onClick={() => copyToClipboard(server.resolvedUrl, `url-${server.id}`)}
                     className="p-1.5 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
                     title="Copy endpoint URL"
                   >
@@ -201,7 +233,7 @@ export default function McpConnectPage() {
                 <p className="text-xs text-neutral-600 dark:text-neutral-400 mb-2">{server.description}</p>
                 <div className="flex items-center gap-2">
                   <code className="flex-1 rounded bg-neutral-100 dark:bg-neutral-800 px-2 py-1 text-xs font-mono text-neutral-700 dark:text-neutral-300 truncate">
-                    {server.config.url}
+                    {server.resolvedUrl}
                   </code>
                   <span className="text-xs text-neutral-400 shrink-0 uppercase">{server.transport}</span>
                 </div>
@@ -217,19 +249,10 @@ export default function McpConnectPage() {
         <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">Test the community-tools server from the command line:</p>
         <div className="relative">
           <pre className="rounded-lg bg-neutral-900 text-blue-200 p-4 text-xs font-mono overflow-x-auto">
-{`# Authenticate and get a token first (OIDC flow)
-# Then call the MCP server:
-
-curl -X POST http://localhost:8000/mcp/community-tools/sse \\
-  -H "Authorization: Bearer YOUR_JWT_TOKEN" \\
-  -H "Content-Type: application/json" \\
-  -d '{"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "post_usecase", "arguments": {"title": "My Use Case", "description": "Description", "tags": ["ai", "demo"]}}, "id": 1}'`}
+{curlCommand}
           </pre>
           <button
-            onClick={() => copyToClipboard(
-              `# Authenticate and get a token first (OIDC flow)\n# Then call the MCP server:\n\ncurl -X POST http://localhost:8000/mcp/community-tools/sse \\\n  -H "Authorization: Bearer YOUR_JWT_TOKEN" \\\n  -H "Content-Type: application/json" \\\n  -d '{"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "post_usecase", "arguments": {"title": "My Use Case", "description": "Description", "tags": ["ai", "demo"]}}, "id": 1}'`,
-              "curl"
-            )}
+            onClick={() => copyToClipboard(curlCommand, "curl")}
             className="absolute top-2 right-2 p-1.5 rounded-md bg-neutral-800 hover:bg-neutral-700 transition-colors"
             title="Copy to clipboard"
           >

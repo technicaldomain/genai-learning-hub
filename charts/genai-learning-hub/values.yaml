@@ -76,6 +76,10 @@ frontend:
   image:
     repository: technicaldomain/genai-learning-hub-frontend
     tag: ""  # defaults to appVersion
+  config:
+    data:
+      API_BASE_URL: "/api"
+      MCP_BASE_URL: "/mcp"
   healthCheck:
     enabled: true
     liveness:

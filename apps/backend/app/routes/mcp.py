@@ -2,15 +2,33 @@
 
 from __future__ import annotations
 
+import urllib.parse
 from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 
 from app.auth.dependencies import get_current_user
 from app.models import McpServer, McpTransport, PaginatedResponse, User
 
 router = APIRouter()
+
+
+async def get_mcp_authenticated_user(request: Request) -> User:
+    """Authenticate MCP routes and advertise a browser login URL when missing session."""
+    try:
+        return await get_current_user(request)
+    except HTTPException:
+        base_url = str(request.base_url).rstrip("/")
+        return_to = urllib.parse.quote(str(request.url), safe="")
+        authorization_uri = f"{base_url}/api/auth/login?return_to={return_to}"
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated",
+            headers={
+                "WWW-Authenticate": f'Bearer authorization_uri="{authorization_uri}"',
+            },
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -110,34 +128,55 @@ _MCP_SERVERS: list[McpServer] = [
 
 @router.get("/mcp/servers")
 async def list_mcp_servers(
-    user: User = Depends(get_current_user),
+    request: Request,
+    user: User = Depends(get_mcp_authenticated_user),
 ):
     """List available MCP servers. Returns connection info and auth requirements."""
+    base_url = str(request.base_url).rstrip("/")
+    resolved_servers = [
+        server.model_copy(
+            update={
+                "config": server.config.model_copy(
+                    update={"url": f"{base_url}/mcp/{server.id}/sse"}
+                )
+            }
+        )
+        for server in _MCP_SERVERS
+    ]
+
     # Filter servers based on user roles in production
     return PaginatedResponse(
-        data=_MCP_SERVERS,
-        total=len(_MCP_SERVERS),
+        data=resolved_servers,
+        total=len(resolved_servers),
         page=1,
-        page_size=len(_MCP_SERVERS),
+        page_size=len(resolved_servers),
     )
 
 
 @router.get("/mcp/servers/{server_id}")
 async def get_mcp_server(
     server_id: str,
-    user: User = Depends(get_current_user),
+    request: Request,
+    user: User = Depends(get_mcp_authenticated_user),
 ):
     """Get a single MCP server configuration by ID."""
+    base_url = str(request.base_url).rstrip("/")
     for server in _MCP_SERVERS:
         if server.id == server_id:
-            return server
+            return server.model_copy(
+                update={
+                    "config": server.config.model_copy(
+                        update={"url": f"{base_url}/mcp/{server.id}/sse"}
+                    )
+                }
+            )
     return {"error": "MCP server not found"}, 404
 
 
 @router.get("/mcp/{server_id}/sse")
 async def mcp_sse_endpoint(
     server_id: str,
-    user: User = Depends(get_current_user),
+    user: User = Depends(get_mcp_authenticated_user),
 ):
     """
     SSE endpoint for an MCP server. In production, this would stream
@@ -173,7 +212,7 @@ async def mcp_sse_endpoint(
 @router.post("/mcp/actions/post-usecase")
 async def post_usecase(
     body: dict,
-    user: dict = Depends(get_current_user),
+    user: dict = Depends(get_mcp_authenticated_user),
 ):
     """Post a new use case (fake — logs and returns success)."""
     return {
@@ -190,7 +229,7 @@ async def post_usecase(
 @router.post("/mcp/actions/post-skill")
 async def post_skill(
     body: dict,
-    user: dict = Depends(get_current_user),
+    user: dict = Depends(get_mcp_authenticated_user),
 ):
     """Post a new skill (fake — logs and returns success)."""
     return {
@@ -207,7 +246,7 @@ async def post_skill(
 @router.post("/mcp/actions/vote")
 async def vote(
     body: dict,
-    user: dict = Depends(get_current_user),
+    user: dict = Depends(get_mcp_authenticated_user),
 ):
     """Vote for a skill or use case (fake — returns incremented count)."""
     target_id = body.get("target_id", "")
@@ -225,7 +264,7 @@ async def vote(
 @router.post("/mcp/actions/start-learning")
 async def start_learning(
     body: dict,
-    user: dict = Depends(get_current_user),
+    user: dict = Depends(get_mcp_authenticated_user),
 ):
     """Start a learning path (fake — returns enrollment info)."""
     path_id = body.get("path_id", "")
@@ -246,7 +285,7 @@ async def start_learning(
 @router.post("/mcp/actions/grab")
 async def grab(
     body: dict,
-    user: dict = Depends(get_current_user),
+    user: dict = Depends(get_mcp_authenticated_user),
 ):
     """Grab a skill or prompt for local project (fake — returns download link)."""
     item_id = body.get("item_id", "")
